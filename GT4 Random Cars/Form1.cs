@@ -204,7 +204,11 @@ namespace GT4_Random_Cars
 
                     if (camType == 1)
                     {
-                        m.writeMemory("0x2034513C", "bytes", "0xFC 0x3F 0x01 0x3C");
+                        m.writeMemory("0x2034513C", "bytes", "0xFC 0x3F 0x01 0x3C"); // Set to GT3-like chase camera attachment
+                    }
+                    else
+                    {
+                        m.writeMemory("0x2034513C", "bytes", "0x80 0x3F 0x01 0x3C"); // Otherwise back to GT4 default
                     }
 
                     if (chkPlrCar.Checked)
