@@ -44,63 +44,79 @@ namespace GT4_Random_Cars
                 txtCars.Add(textBox);
             }
 
-            using (StreamReader reader = new StreamReader("vehicles.csv"))
-            using (CsvParser csv = new CsvParser(reader))
+            try
             {
-                while (true)
+                using (StreamReader reader = new StreamReader("vehicles.csv"))
+                using (CsvParser csv = new CsvParser(reader))
                 {
-                    string[] row = csv.Read();
-                    if (row == null)
+                    while (true)
                     {
-                        break;
-                    }
-                    else
-                    {
-                        cars.Add(new KeyValuePair<string, string>(row[0], row[1]));
+                        string[] row = csv.Read();
+                        if (row == null)
+                        {
+                            break;
+                        }
+                        else
+                        {
+                            cars.Add(new KeyValuePair<string, string>(row[0], row[1]));
+                        }
                     }
                 }
-            }
 
-            foreach (KeyValuePair<string, string> car in cars)
-            {
-                cboPlrCar.Items.Add(car.Value);
-                cboCar1.Items.Add(car.Value);
-                cboCar2.Items.Add(car.Value);
-                cboCar3.Items.Add(car.Value);
-                cboCar4.Items.Add(car.Value);
-                cboCar5.Items.Add(car.Value);
-            }
-
-            cboPlrCar.SelectedIndex = 0;
-            cboCar1.SelectedIndex = 0;
-            cboCar2.SelectedIndex = 0;
-            cboCar3.SelectedIndex = 0;
-            cboCar4.SelectedIndex = 0;
-            cboCar5.SelectedIndex = 0;
-
-            using (StreamReader reader = new StreamReader("tracks.csv"))
-            using (CsvParser csv = new CsvParser(reader))
-            {
-                while (true)
+                foreach (KeyValuePair<string, string> car in cars)
                 {
-                    string[] row = csv.Read();
-                    if (row == null)
+                    cboPlrCar.Items.Add(car.Value);
+                    cboCar1.Items.Add(car.Value);
+                    cboCar2.Items.Add(car.Value);
+                    cboCar3.Items.Add(car.Value);
+                    cboCar4.Items.Add(car.Value);
+                    cboCar5.Items.Add(car.Value);
+                }
+
+                cboPlrCar.SelectedIndex = 0;
+                cboCar1.SelectedIndex = 0;
+                cboCar2.SelectedIndex = 0;
+                cboCar3.SelectedIndex = 0;
+                cboCar4.SelectedIndex = 0;
+                cboCar5.SelectedIndex = 0;
+            }
+            catch (FileNotFoundException)
+            {
+                MessageBox.Show("File 'vehicles.csv' not found. Please ensure this file is in the working directory and try again.", "File not found", MessageBoxButtons.OK);
+                Application.Exit();
+            }
+
+            try
+            {
+                using (StreamReader reader = new StreamReader("tracks.csv"))
+                using (CsvParser csv = new CsvParser(reader))
+                {
+                    while (true)
                     {
-                        break;
-                    }
-                    else
-                    {
-                        tracks.Add(new KeyValuePair<string, string>(row[0], row[1]));
+                        string[] row = csv.Read();
+                        if (row == null)
+                        {
+                            break;
+                        }
+                        else
+                        {
+                            tracks.Add(new KeyValuePair<string, string>(row[0], row[1]));
+                        }
                     }
                 }
-            }
 
-            foreach (KeyValuePair<string, string> track in tracks)
+                foreach (KeyValuePair<string, string> track in tracks)
+                {
+                    cboTrack.Items.Add(track.Value);
+                }
+
+                cboTrack.SelectedIndex = 0;
+            }
+            catch (FileNotFoundException)
             {
-                cboTrack.Items.Add(track.Value);
+                MessageBox.Show("File 'tracks.csv' not found. Please ensure this file is in the working directory and try again.", "File not found", MessageBoxButtons.OK);
+                Application.Exit();
             }
-
-            cboTrack.SelectedIndex = 0;
 
         }
 
