@@ -220,7 +220,7 @@ namespace GT4_Random_Cars
 
                     if (camType == 1)
                     {
-                        m.writeMemory("0x2034513C", "bytes", "0xFC 0x3F 0x01 0x3C"); // Set to GT3-like chase camera attachment
+                        m.writeMemory("0x2034513C", "bytes", "0xF0 0x3F 0x01 0x3C"); // Set to GT3-like chase camera attachment
                     }
                     else
                     {
