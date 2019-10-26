@@ -1,84 +1,83 @@
-﻿20r60r,Beginner Course
-akasaka,Tokyo R246
-apricot,Apricot Hill
-assisi,Citta di Aria
-autumn,Autumn Ring
-capri,Costa di Amalfi
-deepforest,Deep Forest Raceway
-fisco,Fuji Speedway 2005
-fisco_old,Fuji Speedway 80s
-fisco_slalom,Fuji Speedway 90s
-grandcanyon,Grand Canyon
-grandvalley,Grand Valley
-grandvalley_east,Grand Valley East
-highspeedring,High Speed Ring
-hongkong,Hong Kong
-icerace,Ice Arena
-infineon,Infineon Raceway - Sports Car Course
-infineon_nascar,Infineon Raceway - Stock Car Course
-kashiwa,Motor Sports Land
-laguna,Laguna Seca
-midfield,Midfield Raceway
-mini,Autumn Ring Mini
-montecarlo,Cote d'Azur
-motegi,Twin Ring Motegi - Road Course
-motegi_east,Twin Ring Motegi - East Short Course
-motegi_west,Twin Ring Motegi - West Short Course
-new_fisco,Fuji Speedway 2005
-new_fisco_gt,Fuji  Speedway 2005 GT
-newyork,New York
-nurburgring,Nurburgring Nordschleife
-nursnow,Chamonix
-oval,Twin Ring Motegi Super Speedway
-paris_rally,George Paris
-paris_tarmac,Opera Paris
-r_20r60r,Beginner Course Reverse
-r_akasaka,Tokyo R246 Reverse
+﻿apricot,Apricot Hill
 r_apricot,Apricot Hill Reverse
-r_assisi,Citta di Aria Reverse
-r_autumn,Autumn Ring Reverse
-r_capri,Costa di Amalfi Reverse
-r_deepforest,Deep Forest Raceway Reverse
-r_grandcanyon,Grand Canyon Reverse
-r_grandvalley,Grand Valley Reverse
-r_grandvalley_east,Grand Valley East Reverse
-r_highspeedring,High Speed Ring Reverse
-r_hongkong,Hong Kong Reverse
-r_icerace,Ice Arena Reverse
-r_kashiwa,Motor Sports Land Reverse
-r_midfield,Midfield Raceway Reverse
+autumn,Autumn Ring
+mini,Autumn Ring Mini
 r_mini,Autumn Ring Mini Reverse
-r_newyork,New York Reverse
-r_nursnow,Chamonix Reverse
-r_paris_rally,George Paris Reverse
-r_paris_tarmac,Opera Paris Reverse
-r_route5,Special Stage Route 5 Reverse
-r_route5_club,Clubman Stage Route 5 Reverse
-r_seattle,Seattle Circuit Reverse
-r_seoul,Seoul Reverse
-r_smtsouth,Swiss Alps Reverse
-r_tahiti_maze,Tahiti Maze Reverse
-r_trialmt,Trial Mountain Circuit Reverse
-r_yosemite,El Capitan Reverse
+r_autumn,Autumn Ring Reverse
+20r60r,Beginner Course
+r_20r60r,Beginner Course Reverse
+yosemite_dirt,Cathedral Rocks Trail I
 r_yosemite_dirt,Cathedral Rocks Trail I Reverse
+yosemite_dirt_short,Cathedral Rocks Trail II
 r_yosemite_dirt_short.,Cathedral Rocks Trail II Reverse
-route5,Special Stage Route 5
-route5_club,Clubman Stage Route 5
+nursnow,Chamonix
+r_nursnow,Chamonix Reverse
 sarthe,Circuit de la Sarthe
 sarthe_old,Circuit de la Sarthe Old
+sarthe24,Circuit de la Sarthe 24h
 sarthe_old24,Circuit de la Sarthe Old 24h
-sarthe24,Circuit de la Sarthe Old
+assisi,Citta di Aria
+r_assisi,Citta di Aria Reverse
+route5_club,Clubman Stage Route 5
+r_route5_club,Clubman Stage Route 5 Reverse
+capri,Costa di Amalfi
+r_capri,Costa di Amalfi Reverse
+montecarlo,Cote d'Azur
+deepforest,Deep Forest Raceway
+r_deepforest,Deep Forest Raceway Reverse
+r_yosemite,El Capitan Reverse
+yosemite,El Capitan
+new_fisco_gt,Fuji Speedway 2005 GT
+fisco,Fuji Speedway 90s
+new_fisco,Fuji Speedway 2005
+fisco_old,Fuji Speedway 80s
+paris_rally,George Paris
+r_paris_rally,George Paris Reverse
+grandcanyon,Grand Canyon
+r_grandcanyon,Grand Canyon Reverse
+grandvalley,Grand Valley
+grandvalley_east,Grand Valley East
+r_grandvalley_east,Grand Valley East Reverse
+r_grandvalley,Grand Valley Reverse
+highspeedring,High Speed Ring
+r_highspeedring,High Speed Ring Reverse
+hongkong,Hong Kong
+r_hongkong,Hong Kong Reverse
+icerace,Ice Arena
+r_icerace,Ice Arena Reverse
+infineon,Infineon Raceway - Sports Car Course
+infineon_nascar,Infineon Raceway - Stock Car Course
+laguna,Laguna Seca
+midfield,Midfield Raceway
+r_midfield,Midfield Raceway Reverse
+kashiwa,Motor Sports Land
+r_kashiwa,Motor Sports Land Reverse
+newyork,New York
+r_newyork,New York Reverse
+nurburgring,Nurburgring Nordschleife
+paris_tarmac,Opera Paris
+r_paris_tarmac,Opera Paris Reverse
 seattle,Seattle Circuit
+r_seattle,Seattle Circuit Reverse
 seoul,Seoul Central
-smtsouth,Swiss Alps
+r_seoul,Seoul Reverse
+route5,Special Stage Route 5
+r_route5,Special Stage Route 5 Reverse
 suzuka,Suzuka Circuit
 suzuka_east,Suzuka Circuit East Course
 suzuka_west,Suzuka Circuit West Course
+smtsouth,Swiss Alps
+r_smtsouth,Swiss Alps Reverse
 tahiti_maze,Tahiti Maze
+r_tahiti_maze,Tahiti Maze Reverse
 testcourse,Test Course
+akasaka,Tokyo R246
+r_akasaka,Tokyo R246 Reverse
 trialmt,Trial Mountain Circuit
+r_trialmt,Trial Mountain Circuit Reverse
 tsukuba,Tsukuba Circuit
 tsukuba_wet,Tsukuba Circuit Wet
-yosemite,El Capitan Reverse
-yosemite_dirt,Cathedral Rocks Trail I
-yosemite_dirt_short,Cathedral Rocks Trail II
+motegi_east,Twin Ring Motegi - East Short Course
+motegi,Twin Ring Motegi - Road Course
+motegi_west,Twin Ring Motegi - West Short Course
+oval,Twin Ring Motegi Super Speedway
