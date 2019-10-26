@@ -82,7 +82,7 @@ namespace GT4_Random_Cars
             }
             catch (FileNotFoundException)
             {
-                MessageBox.Show("File 'vehicles.csv' not found. Please ensure this file is in the working directory and try again.", "File not found", MessageBoxButtons.OK);
+                MessageBox.Show("File 'vehicles.csv' not found. Please ensure this file is in the working directory and try again.", "File not found", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 Application.Exit();
             }
 
@@ -114,7 +114,7 @@ namespace GT4_Random_Cars
             }
             catch (FileNotFoundException)
             {
-                MessageBox.Show("File 'tracks.csv' not found. Please ensure this file is in the working directory and try again.", "File not found", MessageBoxButtons.OK);
+                MessageBox.Show("File 'tracks.csv' not found. Please ensure this file is in the working directory and try again.", "File not found", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 Application.Exit();
             }
 
