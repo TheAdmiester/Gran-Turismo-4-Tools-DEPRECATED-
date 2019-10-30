@@ -1,6 +1,6 @@
 ﻿namespace GT4_Random_Cars
 {
-    partial class Form1
+    partial class GT4Tools
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(GT4Tools));
             this.grpCars = new System.Windows.Forms.GroupBox();
             this.btnCarsGenerate = new System.Windows.Forms.Button();
             this.txtCar5 = new System.Windows.Forms.TextBox();
@@ -59,6 +59,25 @@
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.cboTrack = new System.Windows.Forms.ComboBox();
             this.btnManualTrackApply = new System.Windows.Forms.Button();
+            this.tabPage5 = new System.Windows.Forms.TabPage();
+            this.groupBox10 = new System.Windows.Forms.GroupBox();
+            this.cboTurbo = new System.Windows.Forms.ComboBox();
+            this.btnTurbo = new System.Windows.Forms.Button();
+            this.groupBox9 = new System.Windows.Forms.GroupBox();
+            this.cboSupercharger = new System.Windows.Forms.ComboBox();
+            this.btnSupercharger = new System.Windows.Forms.Button();
+            this.groupBox8 = new System.Windows.Forms.GroupBox();
+            this.cboNATune = new System.Windows.Forms.ComboBox();
+            this.btnNATune = new System.Windows.Forms.Button();
+            this.groupBox7 = new System.Windows.Forms.GroupBox();
+            this.cboExhaust = new System.Windows.Forms.ComboBox();
+            this.btnExhaust = new System.Windows.Forms.Button();
+            this.groupBox6 = new System.Windows.Forms.GroupBox();
+            this.cboEngine = new System.Windows.Forms.ComboBox();
+            this.btnEngine = new System.Windows.Forms.Button();
+            this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.cboDrivetrain = new System.Windows.Forms.ComboBox();
+            this.btnDrivetrain = new System.Windows.Forms.Button();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.cboCameraType = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
@@ -81,6 +100,13 @@
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox4.SuspendLayout();
+            this.tabPage5.SuspendLayout();
+            this.groupBox10.SuspendLayout();
+            this.groupBox9.SuspendLayout();
+            this.groupBox8.SuspendLayout();
+            this.groupBox7.SuspendLayout();
+            this.groupBox6.SuspendLayout();
+            this.groupBox5.SuspendLayout();
             this.tabPage3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudFOV)).BeginInit();
             this.tabPage4.SuspendLayout();
@@ -188,12 +214,13 @@
             // 
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
+            this.tabControl1.Controls.Add(this.tabPage5);
             this.tabControl1.Controls.Add(this.tabPage3);
             this.tabControl1.Controls.Add(this.tabPage4);
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(402, 447);
+            this.tabControl1.Size = new System.Drawing.Size(402, 596);
             this.tabControl1.TabIndex = 3;
             // 
             // tabPage1
@@ -204,7 +231,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(394, 421);
+            this.tabPage1.Size = new System.Drawing.Size(394, 570);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Event Synthesizer";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -246,7 +273,7 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(394, 421);
+            this.tabPage2.Size = new System.Drawing.Size(394, 570);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Custom Event";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -381,6 +408,207 @@
             this.btnManualTrackApply.UseVisualStyleBackColor = true;
             this.btnManualTrackApply.Click += new System.EventHandler(this.btnManualTrackApply_Click);
             // 
+            // tabPage5
+            // 
+            this.tabPage5.Controls.Add(this.groupBox10);
+            this.tabPage5.Controls.Add(this.groupBox9);
+            this.tabPage5.Controls.Add(this.groupBox8);
+            this.tabPage5.Controls.Add(this.groupBox7);
+            this.tabPage5.Controls.Add(this.groupBox6);
+            this.tabPage5.Controls.Add(this.groupBox5);
+            this.tabPage5.Location = new System.Drawing.Point(4, 22);
+            this.tabPage5.Name = "tabPage5";
+            this.tabPage5.Size = new System.Drawing.Size(394, 570);
+            this.tabPage5.TabIndex = 4;
+            this.tabPage5.Text = "Hybrids";
+            this.tabPage5.UseVisualStyleBackColor = true;
+            // 
+            // groupBox10
+            // 
+            this.groupBox10.Controls.Add(this.cboTurbo);
+            this.groupBox10.Controls.Add(this.btnTurbo);
+            this.groupBox10.Location = new System.Drawing.Point(8, 474);
+            this.groupBox10.Name = "groupBox10";
+            this.groupBox10.Size = new System.Drawing.Size(378, 88);
+            this.groupBox10.TabIndex = 14;
+            this.groupBox10.TabStop = false;
+            this.groupBox10.Text = "Turbo";
+            // 
+            // cboTurbo
+            // 
+            this.cboTurbo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboTurbo.FormattingEnabled = true;
+            this.cboTurbo.Location = new System.Drawing.Point(7, 17);
+            this.cboTurbo.Name = "cboTurbo";
+            this.cboTurbo.Size = new System.Drawing.Size(366, 21);
+            this.cboTurbo.TabIndex = 12;
+            this.cboTurbo.SelectedIndexChanged += new System.EventHandler(this.cboTurbo_SelectedIndexChanged);
+            // 
+            // btnTurbo
+            // 
+            this.btnTurbo.Location = new System.Drawing.Point(252, 44);
+            this.btnTurbo.Name = "btnTurbo";
+            this.btnTurbo.Size = new System.Drawing.Size(121, 38);
+            this.btnTurbo.TabIndex = 8;
+            this.btnTurbo.Text = "Apply";
+            this.btnTurbo.UseVisualStyleBackColor = true;
+            this.btnTurbo.Click += new System.EventHandler(this.btnTurbo_Click);
+            // 
+            // groupBox9
+            // 
+            this.groupBox9.Controls.Add(this.cboSupercharger);
+            this.groupBox9.Controls.Add(this.btnSupercharger);
+            this.groupBox9.Location = new System.Drawing.Point(9, 380);
+            this.groupBox9.Name = "groupBox9";
+            this.groupBox9.Size = new System.Drawing.Size(378, 88);
+            this.groupBox9.TabIndex = 13;
+            this.groupBox9.TabStop = false;
+            this.groupBox9.Text = "Supercharger";
+            // 
+            // cboSupercharger
+            // 
+            this.cboSupercharger.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboSupercharger.FormattingEnabled = true;
+            this.cboSupercharger.Location = new System.Drawing.Point(7, 19);
+            this.cboSupercharger.Name = "cboSupercharger";
+            this.cboSupercharger.Size = new System.Drawing.Size(366, 21);
+            this.cboSupercharger.TabIndex = 11;
+            this.cboSupercharger.SelectedIndexChanged += new System.EventHandler(this.cboSupercharger_SelectedIndexChanged);
+            // 
+            // btnSupercharger
+            // 
+            this.btnSupercharger.Location = new System.Drawing.Point(252, 44);
+            this.btnSupercharger.Name = "btnSupercharger";
+            this.btnSupercharger.Size = new System.Drawing.Size(121, 38);
+            this.btnSupercharger.TabIndex = 8;
+            this.btnSupercharger.Text = "Apply";
+            this.btnSupercharger.UseVisualStyleBackColor = true;
+            this.btnSupercharger.Click += new System.EventHandler(this.btnSupercharger_Click);
+            // 
+            // groupBox8
+            // 
+            this.groupBox8.Controls.Add(this.cboNATune);
+            this.groupBox8.Controls.Add(this.btnNATune);
+            this.groupBox8.Location = new System.Drawing.Point(9, 286);
+            this.groupBox8.Name = "groupBox8";
+            this.groupBox8.Size = new System.Drawing.Size(378, 88);
+            this.groupBox8.TabIndex = 12;
+            this.groupBox8.TabStop = false;
+            this.groupBox8.Text = "NA Tune";
+            // 
+            // cboNATune
+            // 
+            this.cboNATune.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboNATune.FormattingEnabled = true;
+            this.cboNATune.Location = new System.Drawing.Point(6, 19);
+            this.cboNATune.Name = "cboNATune";
+            this.cboNATune.Size = new System.Drawing.Size(366, 21);
+            this.cboNATune.TabIndex = 12;
+            this.cboNATune.SelectedIndexChanged += new System.EventHandler(this.cboNATune_SelectedIndexChanged);
+            // 
+            // btnNATune
+            // 
+            this.btnNATune.Location = new System.Drawing.Point(252, 44);
+            this.btnNATune.Name = "btnNATune";
+            this.btnNATune.Size = new System.Drawing.Size(121, 38);
+            this.btnNATune.TabIndex = 8;
+            this.btnNATune.Text = "Apply";
+            this.btnNATune.UseVisualStyleBackColor = true;
+            this.btnNATune.Click += new System.EventHandler(this.btnNATune_Click);
+            // 
+            // groupBox7
+            // 
+            this.groupBox7.Controls.Add(this.cboExhaust);
+            this.groupBox7.Controls.Add(this.btnExhaust);
+            this.groupBox7.Location = new System.Drawing.Point(8, 192);
+            this.groupBox7.Name = "groupBox7";
+            this.groupBox7.Size = new System.Drawing.Size(378, 88);
+            this.groupBox7.TabIndex = 11;
+            this.groupBox7.TabStop = false;
+            this.groupBox7.Text = "Exhaust";
+            // 
+            // cboExhaust
+            // 
+            this.cboExhaust.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboExhaust.FormattingEnabled = true;
+            this.cboExhaust.Location = new System.Drawing.Point(7, 17);
+            this.cboExhaust.Name = "cboExhaust";
+            this.cboExhaust.Size = new System.Drawing.Size(366, 21);
+            this.cboExhaust.TabIndex = 11;
+            this.cboExhaust.SelectedIndexChanged += new System.EventHandler(this.cboExhaust_SelectedIndexChanged);
+            // 
+            // btnExhaust
+            // 
+            this.btnExhaust.Location = new System.Drawing.Point(252, 44);
+            this.btnExhaust.Name = "btnExhaust";
+            this.btnExhaust.Size = new System.Drawing.Size(121, 38);
+            this.btnExhaust.TabIndex = 8;
+            this.btnExhaust.Text = "Apply";
+            this.btnExhaust.UseVisualStyleBackColor = true;
+            this.btnExhaust.Click += new System.EventHandler(this.btnExhaust_Click);
+            // 
+            // groupBox6
+            // 
+            this.groupBox6.Controls.Add(this.cboEngine);
+            this.groupBox6.Controls.Add(this.btnEngine);
+            this.groupBox6.Location = new System.Drawing.Point(9, 98);
+            this.groupBox6.Name = "groupBox6";
+            this.groupBox6.Size = new System.Drawing.Size(378, 88);
+            this.groupBox6.TabIndex = 10;
+            this.groupBox6.TabStop = false;
+            this.groupBox6.Text = "Engine";
+            // 
+            // cboEngine
+            // 
+            this.cboEngine.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboEngine.FormattingEnabled = true;
+            this.cboEngine.Location = new System.Drawing.Point(6, 19);
+            this.cboEngine.Name = "cboEngine";
+            this.cboEngine.Size = new System.Drawing.Size(366, 21);
+            this.cboEngine.TabIndex = 10;
+            this.cboEngine.SelectedIndexChanged += new System.EventHandler(this.cboEngine_SelectedIndexChanged);
+            // 
+            // btnEngine
+            // 
+            this.btnEngine.Location = new System.Drawing.Point(252, 44);
+            this.btnEngine.Name = "btnEngine";
+            this.btnEngine.Size = new System.Drawing.Size(121, 38);
+            this.btnEngine.TabIndex = 8;
+            this.btnEngine.Text = "Apply";
+            this.btnEngine.UseVisualStyleBackColor = true;
+            this.btnEngine.Click += new System.EventHandler(this.btnEngine_Click);
+            // 
+            // groupBox5
+            // 
+            this.groupBox5.Controls.Add(this.cboDrivetrain);
+            this.groupBox5.Controls.Add(this.btnDrivetrain);
+            this.groupBox5.Location = new System.Drawing.Point(9, 4);
+            this.groupBox5.Name = "groupBox5";
+            this.groupBox5.Size = new System.Drawing.Size(378, 88);
+            this.groupBox5.TabIndex = 0;
+            this.groupBox5.TabStop = false;
+            this.groupBox5.Text = "Drivetrain";
+            // 
+            // cboDrivetrain
+            // 
+            this.cboDrivetrain.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboDrivetrain.FormattingEnabled = true;
+            this.cboDrivetrain.Location = new System.Drawing.Point(6, 19);
+            this.cboDrivetrain.Name = "cboDrivetrain";
+            this.cboDrivetrain.Size = new System.Drawing.Size(366, 21);
+            this.cboDrivetrain.TabIndex = 9;
+            this.cboDrivetrain.SelectedIndexChanged += new System.EventHandler(this.cboDrivetrain_SelectedIndexChanged);
+            // 
+            // btnDrivetrain
+            // 
+            this.btnDrivetrain.Location = new System.Drawing.Point(252, 44);
+            this.btnDrivetrain.Name = "btnDrivetrain";
+            this.btnDrivetrain.Size = new System.Drawing.Size(121, 38);
+            this.btnDrivetrain.TabIndex = 8;
+            this.btnDrivetrain.Text = "Apply";
+            this.btnDrivetrain.UseVisualStyleBackColor = true;
+            this.btnDrivetrain.Click += new System.EventHandler(this.btnDrivetrain_Click);
+            // 
             // tabPage3
             // 
             this.tabPage3.Controls.Add(this.cboCameraType);
@@ -389,7 +617,7 @@
             this.tabPage3.Controls.Add(this.nudFOV);
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Size = new System.Drawing.Size(394, 421);
+            this.tabPage3.Size = new System.Drawing.Size(394, 570);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Misc";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -455,7 +683,7 @@
             this.tabPage4.Controls.Add(this.label3);
             this.tabPage4.Location = new System.Drawing.Point(4, 22);
             this.tabPage4.Name = "tabPage4";
-            this.tabPage4.Size = new System.Drawing.Size(394, 421);
+            this.tabPage4.Size = new System.Drawing.Size(394, 570);
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "Info";
             this.tabPage4.UseVisualStyleBackColor = true;
@@ -503,7 +731,7 @@
             // chkCar
             // 
             this.chkCar.AutoSize = true;
-            this.chkCar.Location = new System.Drawing.Point(12, 476);
+            this.chkCar.Location = new System.Drawing.Point(12, 625);
             this.chkCar.Name = "chkCar";
             this.chkCar.Size = new System.Drawing.Size(146, 17);
             this.chkCar.TabIndex = 4;
@@ -513,7 +741,7 @@
             // chkTrack
             // 
             this.chkTrack.AutoSize = true;
-            this.chkTrack.Location = new System.Drawing.Point(12, 499);
+            this.chkTrack.Location = new System.Drawing.Point(12, 648);
             this.chkTrack.Name = "chkTrack";
             this.chkTrack.Size = new System.Drawing.Size(185, 17);
             this.chkTrack.TabIndex = 5;
@@ -523,18 +751,18 @@
             // chkPlrCar
             // 
             this.chkPlrCar.AutoSize = true;
-            this.chkPlrCar.Location = new System.Drawing.Point(12, 453);
+            this.chkPlrCar.Location = new System.Drawing.Point(12, 602);
             this.chkPlrCar.Name = "chkPlrCar";
             this.chkPlrCar.Size = new System.Drawing.Size(160, 17);
             this.chkPlrCar.TabIndex = 6;
             this.chkPlrCar.Text = "Override Player Car (Arcade)";
             this.chkPlrCar.UseVisualStyleBackColor = true;
             // 
-            // Form1
+            // GT4Tools
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(403, 524);
+            this.ClientSize = new System.Drawing.Size(403, 674);
             this.Controls.Add(this.chkPlrCar);
             this.Controls.Add(this.chkTrack);
             this.Controls.Add(this.chkCar);
@@ -542,9 +770,9 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
-            this.Name = "Form1";
+            this.Name = "GT4Tools";
             this.Text = "GT4 Tools";
-            this.Load += new System.EventHandler(this.Form1_Load);
+            this.Load += new System.EventHandler(this.GT4Tools_Load);
             this.grpCars.ResumeLayout(false);
             this.grpCars.PerformLayout();
             this.grpTrack.ResumeLayout(false);
@@ -557,6 +785,13 @@
             this.groupBox2.ResumeLayout(false);
             this.groupBox3.ResumeLayout(false);
             this.groupBox4.ResumeLayout(false);
+            this.tabPage5.ResumeLayout(false);
+            this.groupBox10.ResumeLayout(false);
+            this.groupBox9.ResumeLayout(false);
+            this.groupBox8.ResumeLayout(false);
+            this.groupBox7.ResumeLayout(false);
+            this.groupBox6.ResumeLayout(false);
+            this.groupBox5.ResumeLayout(false);
             this.tabPage3.ResumeLayout(false);
             this.tabPage3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudFOV)).EndInit();
@@ -613,6 +848,25 @@
         private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.ComboBox cboTrack;
         private System.Windows.Forms.Button btnManualTrackApply;
+        private System.Windows.Forms.TabPage tabPage5;
+        private System.Windows.Forms.GroupBox groupBox10;
+        private System.Windows.Forms.ComboBox cboTurbo;
+        private System.Windows.Forms.Button btnTurbo;
+        private System.Windows.Forms.GroupBox groupBox9;
+        private System.Windows.Forms.ComboBox cboSupercharger;
+        private System.Windows.Forms.Button btnSupercharger;
+        private System.Windows.Forms.GroupBox groupBox8;
+        private System.Windows.Forms.ComboBox cboNATune;
+        private System.Windows.Forms.Button btnNATune;
+        private System.Windows.Forms.GroupBox groupBox7;
+        private System.Windows.Forms.ComboBox cboExhaust;
+        private System.Windows.Forms.Button btnExhaust;
+        private System.Windows.Forms.GroupBox groupBox6;
+        private System.Windows.Forms.ComboBox cboEngine;
+        private System.Windows.Forms.Button btnEngine;
+        private System.Windows.Forms.GroupBox groupBox5;
+        private System.Windows.Forms.ComboBox cboDrivetrain;
+        private System.Windows.Forms.Button btnDrivetrain;
     }
 }
 

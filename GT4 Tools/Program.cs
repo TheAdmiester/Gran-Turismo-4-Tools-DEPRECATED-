@@ -16,7 +16,7 @@ namespace GT4_Random_Cars
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+            Application.Run(new GT4Tools());
         }
     }
 }
