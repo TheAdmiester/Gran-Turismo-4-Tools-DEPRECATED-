@@ -27,8 +27,8 @@ namespace GT4_Tools
         List<TextBox> txtCars = new List<TextBox>();
         Random random = new Random();
         int rnd = 0, camType = 0;
-        string cboPopulator, selectedDrivetrain, selectedEngine, selectedExhaust, selectedNATune, selectedSupercharger, selectedTurbo;
-        string drivetrain, engine, exhaust, naTune, supercharger, turbo, oppCar1, oppCar2, oppCar3, oppCar4, oppCar5, oppCarLbl1, oppCarLbl2, oppCarLbl3, oppCarLbl4, oppCarLbl5, plrCar, plrCarLbl, track, trackLbl, memWrite1, memWrite2;
+        string cboPopulator, memWrite, selectedDrivetrain, selectedEngine, selectedExhaust, selectedNATune, selectedSupercharger, selectedTurbo;
+        string drivetrain, engine, exhaust, naTune, supercharger, turbo, oppCar1, oppCar2, oppCar3, oppCar4, oppCar5, oppCarLbl1, oppCarLbl2, oppCarLbl3, oppCarLbl4, oppCarLbl5, plrCar, plrCarLbl, track, trackLbl;
         bool btnDrivetrainClicked, btnEngineClicked, btnExhaustClicked, btnNATuneClicked, btnSuperchargerClicked, btnTurboClicked, csvsLoaded;
 
         public GT4Tools()
@@ -197,66 +197,60 @@ namespace GT4_Tools
 
                     if (btnDrivetrainClicked)
                     {
-                        memWrite1 = "0x" + drivetrain.Substring(2,2);
-                        memWrite2 = "0x" + drivetrain.Substring(0,2);
+                        memWrite = MakeMemorySubstring(drivetrain);
                         m.writeMemory("0x20A1F810", "bytes", "0x00 0x00 0x00 0x00");
 
-                        m.writeMemory("0x20A1F810", "bytes", memWrite1 + " " + memWrite2);
+                        m.writeMemory("0x20A1F810", "bytes", memWrite);
 
                         btnDrivetrainClicked = false;
                     }
 
                     if (btnEngineClicked)
                     {
-                        memWrite1 = "0x" + engine.Substring(2, 2);
-                        memWrite2 = "0x" + engine.Substring(0, 2);
+                        memWrite = MakeMemorySubstring(engine);
                         m.writeMemory("0x20A1F808", "bytes", "0x00 0x00 0x00 0x00");
 
-                        m.writeMemory("0x20A1F808", "bytes", memWrite1 + " " + memWrite2);
+                        m.writeMemory("0x20A1F808", "bytes", memWrite);
 
                         btnEngineClicked = false;
                     }
 
                     if (btnExhaustClicked)
                     {
-                        memWrite1 = "0x" + exhaust.Substring(2, 2);
-                        memWrite2 = "0x" + exhaust.Substring(0, 2);
+                        memWrite = MakeMemorySubstring(exhaust);
                         m.writeMemory("0x20A1F8A0", "bytes", "0x00 0x00 0x00 0x00");
 
-                        m.writeMemory("0x20A1F8A0", "bytes", memWrite1 + " " + memWrite2);
+                        m.writeMemory("0x20A1F8A0", "bytes", memWrite);
 
                         btnExhaustClicked = false;
                     }
 
                     if (btnNATuneClicked)
                     {
-                        memWrite1 = "0x" + naTune.Substring(2, 2);
-                        memWrite2 = "0x" + naTune.Substring(0, 2);
+                        memWrite = MakeMemorySubstring(naTune);
                         m.writeMemory("0x20A1F878", "bytes", "0x00 0x00 0x00 0x00");
 
-                        m.writeMemory("0x20A1F878", "bytes", memWrite1 + " " + memWrite2);
+                        m.writeMemory("0x20A1F878", "bytes", memWrite);
 
                         btnNATuneClicked = false;
                     }
 
                     if (btnSuperchargerClicked)
                     {
-                        memWrite1 = "0x" + supercharger.Substring(2, 2);
-                        memWrite2 = "0x" + supercharger.Substring(0, 2);
+                        memWrite = MakeMemorySubstring(supercharger);
                         m.writeMemory("0x20A1F8D8", "bytes", "0x00 0x00 0x00 0x00");
 
-                        m.writeMemory("0x20A1F8D8", "bytes", memWrite1 + " " + memWrite2);
+                        m.writeMemory("0x20A1F8D8", "bytes", memWrite);
 
                         btnSuperchargerClicked = false;
                     }
 
                     if (btnTurboClicked)
                     {
-                        memWrite1 = "0x" + turbo.Substring(2, 2);
-                        memWrite2 = "0x" + turbo.Substring(0, 2);
+                        memWrite = MakeMemorySubstring(turbo);
                         m.writeMemory("0x20A1F880", "bytes", "0x00 0x00 0x00 0x00");
 
-                        m.writeMemory("0x20A1F880", "bytes", memWrite1 + " " + memWrite2);
+                        m.writeMemory("0x20A1F880", "bytes", memWrite);
 
                         btnTurboClicked = false;
                     }
@@ -498,7 +492,7 @@ namespace GT4_Tools
         private void btnDrivetrain_Click(object sender, EventArgs e)
         {
             drivetrain = drivetrains[cboDrivetrain.SelectedIndex].Key;
-
+            memWrite = MakeMemorySubstring(drivetrain);
             btnDrivetrainClicked = true;
         }
 
@@ -556,6 +550,14 @@ namespace GT4_Tools
             cboPopulator = ByteArrayToString(m.readBytes(memAddress, 4));
             cboPopulator = cboPopulator.Substring(2, 2) + cboPopulator.Substring(0, 2);
             return listToSearch.FirstOrDefault(x => x.Key == cboPopulator).Value;
+        }
+
+        public string MakeMemorySubstring(string partString)
+        {
+            string memAddr1 = "0x" + partString.Substring(2, 2);
+            string memAddr2 = "0x" + partString.Substring(0, 2);
+
+            return memAddr1 + " " + memAddr2;
         }
 
         public List<KeyValuePair<string, string>> LoadCSV(string csvFile, bool flippedString)
