@@ -150,8 +150,9 @@ namespace GT4_Tools
 
                     if (chkCamera.Checked)
                     {
-                        m.writeMemory("0x21FDDCD4", "float", nudFOV.Value.ToString());
-                        m.writeMemory("0x21FE1294", "float", nudFOV.Value.ToString());
+                        m.writeMemory("0x21FDDCD4", "float", nudFOV.Value.ToString()); // Arcade mode FOV
+                        m.writeMemory("0x21FE1294", "float", nudFOV.Value.ToString()); // GT Mode FOV
+                        m.writeMemory("0x21FC2914", "float", nudFOV.Value.ToString()); // Special Condition Race FOV
 
                         if (camType == 1)
                         {
