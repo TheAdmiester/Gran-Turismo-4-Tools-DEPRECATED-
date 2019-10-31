@@ -117,6 +117,14 @@ namespace GT4_Tools
                 cboTurbo.Items.Add(turbo.Value);
             }
 
+            cboPlrCar.SelectedIndex = 0;
+            cboCar1.SelectedIndex = 0;
+            cboCar2.SelectedIndex = 0;
+            cboCar3.SelectedIndex = 0;
+            cboCar4.SelectedIndex = 0;
+            cboCar5.SelectedIndex = 0;
+            cboTrack.SelectedIndex = 0;
+
         }
 
         private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
