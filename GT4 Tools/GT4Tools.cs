@@ -141,6 +141,13 @@ namespace GT4_Tools
 
                 if (openProc && csvsLoaded)
                 {
+                    selectedDrivetrain = GetExistingPart("0x20A1F810", drivetrains);
+                    selectedEngine = GetExistingPart("0x20A1F808", engines);
+                    selectedExhaust = GetExistingPart("0x20A1F8A0", exhausts);
+                    selectedNATune = GetExistingPart("0x20A1F878", naTunes);
+                    selectedSupercharger = GetExistingPart("0x20A1F8D8", superchargers);
+                    selectedTurbo = GetExistingPart("0x20A1F880", turbos);
+
                     if (chkCamera.Checked)
                     {
                         m.writeMemory("0x21FDDCD4", "float", nudFOV.Value.ToString());
@@ -187,13 +194,6 @@ namespace GT4_Tools
                         m.writeMemory("0x20A0C110", "string", oppCar4);
                         m.writeMemory("0x20A0C178", "string", oppCar5);
                     }
-
-                    selectedDrivetrain = GetExistingPart("0x20A1F810", drivetrains);
-                    selectedEngine = GetExistingPart("0x20A1F808", engines);                    
-                    selectedExhaust = GetExistingPart("0x20A1F8A0", exhausts);                    
-                    selectedNATune = GetExistingPart("0x20A1F878", naTunes);                    
-                    selectedSupercharger = GetExistingPart("0x20A1F8D8", superchargers);                    
-                    selectedTurbo = GetExistingPart("0x20A1F880", turbos);
 
                     if (btnDrivetrainClicked)
                     {
@@ -554,6 +554,7 @@ namespace GT4_Tools
 
         public string MakeMemorySubstring(string partString)
         {
+            // Flip endianness of byte pair (e.g. 1234 -> 0x34 0x12)
             string memAddr1 = "0x" + partString.Substring(2, 2);
             string memAddr2 = "0x" + partString.Substring(0, 2);
 
@@ -578,7 +579,7 @@ namespace GT4_Tools
                         }
                         else
                         {
-                            if (flippedString)
+                            if (flippedString) // Some of the CSVs have the name first, some have the value first - little workaround to load either 
                             {
                                 list.Add(new KeyValuePair<string, string>(row[1], row[0]));
                             }
