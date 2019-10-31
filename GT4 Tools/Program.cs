@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace GT4_Random_Cars
+namespace GT4_Tools
 {
     static class Program
     {

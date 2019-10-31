@@ -22,5 +22,29 @@ namespace GT4_Tools.Properties {
                 return defaultInstance;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int CameraSetting {
+            get {
+                return ((int)(this["CameraSetting"]));
+            }
+            set {
+                this["CameraSetting"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("90")]
+        public int FOV {
+            get {
+                return ((int)(this["FOV"]));
+            }
+            set {
+                this["FOV"] = value;
+            }
+        }
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace GT4_Random_Cars
+﻿namespace GT4_Tools
 {
     partial class GT4Tools
     {
@@ -674,6 +674,7 @@
             0,
             0,
             0});
+            this.nudFOV.ValueChanged += new System.EventHandler(this.nudFOV_ValueChanged);
             // 
             // tabPage4
             // 

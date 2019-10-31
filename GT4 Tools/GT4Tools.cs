@@ -11,7 +11,7 @@ using System.Windows.Forms;
 using CsvHelper;
 using Memory;
 
-namespace GT4_Random_Cars
+namespace GT4_Tools
 {
     public partial class GT4Tools : Form
     {
@@ -26,10 +26,259 @@ namespace GT4_Random_Cars
         List<KeyValuePair<string, string>> turbos = new List<KeyValuePair<string, string>>();
         List<TextBox> txtCars = new List<TextBox>();
         Random random = new Random();
-        int rnd = 0;
-        int camType = 0;
+        int rnd = 0, camType = 0;
         string cboPopulator, selectedDrivetrain, selectedEngine, selectedExhaust, selectedNATune, selectedSupercharger, selectedTurbo;
         string drivetrain, engine, exhaust, naTune, supercharger, turbo, oppCar1, oppCar2, oppCar3, oppCar4, oppCar5, oppCarLbl1, oppCarLbl2, oppCarLbl3, oppCarLbl4, oppCarLbl5, plrCar, plrCarLbl, track, trackLbl, memWrite1, memWrite2;
+        bool btnDrivetrainClicked, btnEngineClicked, btnExhaustClicked, btnNATuneClicked, btnSuperchargerClicked, btnTurboClicked, csvsLoaded;
+
+        public GT4Tools()
+        {
+            InitializeComponent();
+
+            tabControl1.SelectedIndexChanged += new EventHandler(tabControl1_SelectedIndexChanged);
+        }
+
+        private void GT4Tools_Load(object sender, EventArgs e)
+        {
+            nudFOV.Value = GT4_Tools.Properties.Settings.Default.FOV;
+            cboCameraType.SelectedIndex = GT4_Tools.Properties.Settings.Default.CameraSetting;
+
+            if (!backgroundWorker1.IsBusy)
+            {
+                backgroundWorker1.RunWorkerAsync();
+            }
+
+            foreach (TextBox textBox in grpCars.Controls.OfType<TextBox>())
+            {
+                txtCars.Add(textBox);
+            }
+
+            try
+            {
+                cars = LoadCSV("vehicles", false);
+                tracks = LoadCSV("tracks", false);
+                drivetrains = LoadCSV("drivetrains", true);
+                engines = LoadCSV("engines", true);
+                exhausts = LoadCSV("exhausts", true);
+                naTunes = LoadCSV("natunes", true);
+                superchargers = LoadCSV("superchargers", true);
+                turbos = LoadCSV("turbos", true);
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("An error occurred when loading CSV files. Please ensure the files are in the directory and try again.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Application.Exit();
+            }
+
+            csvsLoaded = true;
+
+            foreach (KeyValuePair<string, string> car in cars)
+            {
+                cboPlrCar.Items.Add(car.Value);
+                cboCar1.Items.Add(car.Value);
+                cboCar2.Items.Add(car.Value);
+                cboCar3.Items.Add(car.Value);
+                cboCar4.Items.Add(car.Value);
+                cboCar5.Items.Add(car.Value);
+            }
+
+            foreach (KeyValuePair<string, string> track in tracks)
+            {
+                cboTrack.Items.Add(track.Value);
+            }
+
+            foreach (KeyValuePair<string, string> drivetrain in drivetrains)
+            {
+                cboDrivetrain.Items.Add(drivetrain.Value);
+            }
+
+            foreach (KeyValuePair<string, string> engine in engines)
+            {
+                cboEngine.Items.Add(engine.Value);
+            }
+
+            foreach (KeyValuePair<string, string> exhaust in exhausts)
+            {
+                cboExhaust.Items.Add(exhaust.Value);
+            }
+
+            foreach (KeyValuePair<string, string> naTune in naTunes)
+            {
+                cboNATune.Items.Add(naTune.Value);
+            }
+
+            foreach (KeyValuePair<string, string> supercharger in superchargers)
+            {
+                cboSupercharger.Items.Add(supercharger.Value);
+            }
+
+            foreach (KeyValuePair<string, string> turbo in turbos)
+            {
+                cboTurbo.Items.Add(turbo.Value);
+            }
+
+        }
+
+        private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
+        {
+            while (true)
+            {
+                int pID = m.getProcIDFromName("pcsx2");
+                bool openProc = false;
+
+                if (pID > 0)
+                {
+                    openProc = m.OpenProcess(pID);
+                }
+
+                if (openProc && csvsLoaded)
+                {
+                    m.writeMemory("0x21FDDCD4", "float", nudFOV.Value.ToString());
+                    m.writeMemory("0x21FE1294", "float", nudFOV.Value.ToString());
+
+                    if (camType == 1)
+                    {
+                        m.writeMemory("0x2034513C", "bytes", "0xF0 0x3F 0x01 0x3C"); // Set to GT3-like chase camera attachment
+                    }
+                    else
+                    {
+                        m.writeMemory("0x2034513C", "bytes", "0x80 0x3F 0x01 0x3C"); // Otherwise back to GT4 default
+                    }
+
+                    if (chkPlrCar.Checked)
+                    {
+                        m.writeMemory("0x20A0BF70", "bytes", "0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00");
+
+                        m.writeMemory("0x20A0BF70", "string", plrCar);
+                    }
+
+                    if (chkTrack.Checked)
+                    {
+                        m.writeMemory("0x20A0BE94", "bytes", "0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00");
+
+                        m.writeMemory("0x20A0BE94", "string", track);
+                    }
+
+                    if (chkCar.Checked)
+                    {
+
+                        // If generating a new set of cars, null out any existing selection
+                        // This is for if the new car string is shorter than prev (e.g. "VolkswagenGolf" to "AudiTT" would result in "AudiTTagenGolf" otherwise)
+                        m.writeMemory("0x20A0BFD8", "bytes", "0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00");
+                        m.writeMemory("0x20A0C040", "bytes", "0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00");
+                        m.writeMemory("0x20A0C0A8", "bytes", "0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00");
+                        m.writeMemory("0x20A0C110", "bytes", "0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00");
+                        m.writeMemory("0x20A0C178", "bytes", "0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00");
+
+                        m.writeMemory("0x20A0BFD8", "string", oppCar1);
+                        m.writeMemory("0x20A0C040", "string", oppCar2);
+                        m.writeMemory("0x20A0C0A8", "string", oppCar3);
+                        m.writeMemory("0x20A0C110", "string", oppCar4);
+                        m.writeMemory("0x20A0C178", "string", oppCar5);
+                    }
+
+                    //-----------This is messy and needs to be a function/loop---------------
+
+                    cboPopulator = ByteArrayToString(m.readBytes("0x20A1F810", 4));
+                    cboPopulator = cboPopulator.Substring(2, 2) + cboPopulator.Substring(0, 2); 
+                    selectedDrivetrain = drivetrains.FirstOrDefault(x => x.Key == cboPopulator).Value;
+
+                    cboPopulator = ByteArrayToString(m.readBytes("0x20A1F808", 4));
+                    cboPopulator = cboPopulator.Substring(2, 2) + cboPopulator.Substring(0, 2);
+                    selectedEngine = engines.FirstOrDefault(x => x.Key == cboPopulator).Value;
+
+                    cboPopulator = ByteArrayToString(m.readBytes("0x20A1F8A0", 4));
+                    cboPopulator = cboPopulator.Substring(2, 2) + cboPopulator.Substring(0, 2);
+                    selectedExhaust = exhausts.FirstOrDefault(x => x.Key == cboPopulator).Value;
+
+                    cboPopulator = ByteArrayToString(m.readBytes("0x20A1F878", 4));
+                    cboPopulator = cboPopulator.Substring(2, 2) + cboPopulator.Substring(0, 2);
+                    selectedNATune = naTunes.FirstOrDefault(x => x.Key == cboPopulator).Value;
+
+                    cboPopulator = ByteArrayToString(m.readBytes("0x20A1F8D8", 4));
+                    cboPopulator = cboPopulator.Substring(2, 2) + cboPopulator.Substring(0, 2);
+                    selectedSupercharger = superchargers.FirstOrDefault(x => x.Key == cboPopulator).Value;
+
+                    cboPopulator = ByteArrayToString(m.readBytes("0x20A1F880", 4));
+                    cboPopulator = cboPopulator.Substring(2, 2) + cboPopulator.Substring(0, 2);
+                    selectedTurbo = turbos.FirstOrDefault(x => x.Key == cboPopulator).Value;
+
+                    //-----------------------------------------------------------------------
+
+                    if (btnDrivetrainClicked)
+                    {
+                        memWrite1 = "0x" + drivetrain.Substring(2,2);
+                        memWrite2 = "0x" + drivetrain.Substring(0,2);
+                        m.writeMemory("0x20A1F810", "bytes", "0x00 0x00 0x00 0x00");
+
+                        m.writeMemory("0x20A1F810", "bytes", memWrite1 + " " + memWrite2);
+
+                        btnDrivetrainClicked = false;
+                    }
+
+                    if (btnEngineClicked)
+                    {
+                        memWrite1 = "0x" + engine.Substring(2, 2);
+                        memWrite2 = "0x" + engine.Substring(0, 2);
+                        m.writeMemory("0x20A1F808", "bytes", "0x00 0x00 0x00 0x00");
+
+                        m.writeMemory("0x20A1F808", "bytes", memWrite1 + " " + memWrite2);
+
+                        btnEngineClicked = false;
+                    }
+
+                    if (btnExhaustClicked)
+                    {
+                        memWrite1 = "0x" + exhaust.Substring(2, 2);
+                        memWrite2 = "0x" + exhaust.Substring(0, 2);
+                        m.writeMemory("0x20A1F8A0", "bytes", "0x00 0x00 0x00 0x00");
+
+                        m.writeMemory("0x20A1F8A0", "bytes", memWrite1 + " " + memWrite2);
+
+                        btnExhaustClicked = false;
+                    }
+
+                    if (btnNATuneClicked)
+                    {
+                        memWrite1 = "0x" + naTune.Substring(2, 2);
+                        memWrite2 = "0x" + naTune.Substring(0, 2);
+                        m.writeMemory("0x20A1F878", "bytes", "0x00 0x00 0x00 0x00");
+
+                        m.writeMemory("0x20A1F878", "bytes", memWrite1 + " " + memWrite2);
+
+                        btnNATuneClicked = false;
+                    }
+
+                    if (btnSuperchargerClicked)
+                    {
+                        memWrite1 = "0x" + supercharger.Substring(2, 2);
+                        memWrite2 = "0x" + supercharger.Substring(0, 2);
+                        m.writeMemory("0x20A1F8D8", "bytes", "0x00 0x00 0x00 0x00");
+
+                        m.writeMemory("0x20A1F8D8", "bytes", memWrite1 + " " + memWrite2);
+
+                        btnSuperchargerClicked = false;
+                    }
+
+                    if (btnTurboClicked)
+                    {
+                        memWrite1 = "0x" + turbo.Substring(2, 2);
+                        memWrite2 = "0x" + turbo.Substring(0, 2);
+                        m.writeMemory("0x20A1F880", "bytes", "0x00 0x00 0x00 0x00");
+
+                        m.writeMemory("0x20A1F880", "bytes", memWrite1 + " " + memWrite2);
+
+                        btnTurboClicked = false;
+                    }
+                }
+            }
+        }
+
+        private void nudFOV_ValueChanged(object sender, EventArgs e)
+        {
+            GT4_Tools.Properties.Settings.Default.FOV = (int)nudFOV.Value;
+            GT4_Tools.Properties.Settings.Default.Save();
+        }
 
         private void cboTurbo_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -103,307 +352,13 @@ namespace GT4_Random_Cars
             }
         }
 
-        bool btnDrivetrainClicked, btnEngineClicked, btnExhaustClicked, btnNATuneClicked, btnSuperchargerClicked, btnTurboClicked, csvsLoaded;
-
-        public GT4Tools()
-        {
-            InitializeComponent();
-
-            tabControl1.SelectedIndexChanged += new EventHandler(tabControl1_SelectedIndexChanged);
-        }
-
-        private void GT4Tools_Load(object sender, EventArgs e)
-        {
-            nudFOV.Value = 90; // Default game FOV
-            cboCameraType.SelectedIndex = 0;
-
-            if (!backgroundWorker1.IsBusy)
-            {
-                backgroundWorker1.RunWorkerAsync();
-            }
-
-            foreach (TextBox textBox in grpCars.Controls.OfType<TextBox>())
-            {
-                txtCars.Add(textBox);
-            }
-
-            try
-            {
-                using (StreamReader reader = new StreamReader("vehicles.csv"))
-                using (CsvParser csv = new CsvParser(reader))
-                {
-                    while (true)
-                    {
-                        string[] row = csv.Read();
-                        if (row == null)
-                        {
-                            break;
-                        }
-                        else
-                        {
-                            cars.Add(new KeyValuePair<string, string>(row[0], row[1]));
-                        }
-                    }
-                }
-
-                foreach (KeyValuePair<string, string> car in cars)
-                {
-                    cboPlrCar.Items.Add(car.Value);
-                    cboCar1.Items.Add(car.Value);
-                    cboCar2.Items.Add(car.Value);
-                    cboCar3.Items.Add(car.Value);
-                    cboCar4.Items.Add(car.Value);
-                    cboCar5.Items.Add(car.Value);
-                }
-
-                cboPlrCar.SelectedIndex = 0;
-                cboCar1.SelectedIndex = 0;
-                cboCar2.SelectedIndex = 0;
-                cboCar3.SelectedIndex = 0;
-                cboCar4.SelectedIndex = 0;
-                cboCar5.SelectedIndex = 0;
-            }
-            catch (FileNotFoundException)
-            {
-                MessageBox.Show("File 'vehicles.csv' not found. Please ensure this file is in the working directory and try again.", "File not found", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                Application.Exit();
-            }
-
-            try
-            {
-                using (StreamReader reader = new StreamReader("tracks.csv"))
-                using (CsvParser csv = new CsvParser(reader))
-                {
-                    while (true)
-                    {
-                        string[] row = csv.Read();
-                        if (row == null)
-                        {
-                            break;
-                        }
-                        else
-                        {
-                            tracks.Add(new KeyValuePair<string, string>(row[0], row[1]));
-                        }
-                    }
-                }
-
-                foreach (KeyValuePair<string, string> track in tracks)
-                {
-                    cboTrack.Items.Add(track.Value);
-                }
-
-                cboTrack.SelectedIndex = 0;
-            }
-            catch (FileNotFoundException)
-            {
-                MessageBox.Show("File 'tracks.csv' not found. Please ensure this file is in the working directory and try again.", "File not found", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                Application.Exit();
-            }
-
-            try
-            {
-                using (StreamReader reader = new StreamReader("drivetrains.csv"))
-                using (CsvParser csv = new CsvParser(reader))
-                {
-                    while (true)
-                    {
-                        string[] row = csv.Read();
-                        if (row == null)
-                        {
-                            break;
-                        }
-                        else
-                        {
-                            drivetrains.Add(new KeyValuePair<string, string>(row[0], row[1]));
-                        }
-                    }
-                }
-
-                foreach (KeyValuePair<string, string> drivetrain in drivetrains)
-                {
-                    cboDrivetrain.Items.Add(drivetrain.Key);
-                }
-
-                cboDrivetrain.SelectedIndex = 0;
-            }
-            catch (FileNotFoundException)
-            {
-                MessageBox.Show("File 'drivetrains.csv' not found. Please ensure this file is in the working directory and try again.", "File not found", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                Application.Exit();
-            }
-
-            try
-            {
-                using (StreamReader reader = new StreamReader("engines.csv"))
-                using (CsvParser csv = new CsvParser(reader))
-                {
-                    while (true)
-                    {
-                        string[] row = csv.Read();
-                        if (row == null)
-                        {
-                            break;
-                        }
-                        else
-                        {
-                            engines.Add(new KeyValuePair<string, string>(row[0], row[1]));
-                        }
-                    }
-                }
-
-                foreach (KeyValuePair<string, string> engine in engines)
-                {
-                    cboEngine.Items.Add(engine.Key);
-                }
-
-                cboEngine.SelectedIndex = 0;
-            }
-            catch (FileNotFoundException)
-            {
-                MessageBox.Show("File 'engines.csv' not found. Please ensure this file is in the working directory and try again.", "File not found", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                Application.Exit();
-            }
-
-            try
-            {
-                using (StreamReader reader = new StreamReader("exhausts.csv"))
-                using (CsvParser csv = new CsvParser(reader))
-                {
-                    while (true)
-                    {
-                        string[] row = csv.Read();
-                        if (row == null)
-                        {
-                            break;
-                        }
-                        else
-                        {
-                            exhausts.Add(new KeyValuePair<string, string>(row[0], row[1]));
-                        }
-                    }
-                }
-
-                foreach (KeyValuePair<string, string> exhaust in exhausts)
-                {
-                    cboExhaust.Items.Add(exhaust.Key);
-                }
-
-                cboExhaust.SelectedIndex = 0;
-            }
-            catch (FileNotFoundException)
-            {
-                MessageBox.Show("File 'exhausts.csv' not found. Please ensure this file is in the working directory and try again.", "File not found", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                Application.Exit();
-            }
-
-            try
-            {
-                using (StreamReader reader = new StreamReader("natunes.csv"))
-                using (CsvParser csv = new CsvParser(reader))
-                {
-                    while (true)
-                    {
-                        string[] row = csv.Read();
-                        if (row == null)
-                        {
-                            break;
-                        }
-                        else
-                        {
-                            naTunes.Add(new KeyValuePair<string, string>(row[0], row[1]));
-                        }
-                    }
-                }
-
-                foreach (KeyValuePair<string, string> natune in naTunes)
-                {
-                    cboNATune.Items.Add(natune.Key);
-                }
-
-                cboNATune.SelectedIndex = 0;
-            }
-            catch (FileNotFoundException)
-            {
-                MessageBox.Show("File 'natunes.csv' not found. Please ensure this file is in the working directory and try again.", "File not found", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                Application.Exit();
-            }
-
-            try
-            {
-                using (StreamReader reader = new StreamReader("superchargers.csv"))
-                using (CsvParser csv = new CsvParser(reader))
-                {
-                    while (true)
-                    {
-                        string[] row = csv.Read();
-                        if (row == null)
-                        {
-                            break;
-                        }
-                        else
-                        {
-                            superchargers.Add(new KeyValuePair<string, string>(row[0], row[1]));
-                        }
-                    }
-                }
-
-                foreach (KeyValuePair<string, string> supercharger in superchargers)
-                {
-                    cboSupercharger.Items.Add(supercharger.Key);
-                }
-
-                cboSupercharger.SelectedIndex = 0;
-            }
-            catch (FileNotFoundException)
-            {
-                MessageBox.Show("File 'superchargers.csv' not found. Please ensure this file is in the working directory and try again.", "File not found", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                Application.Exit();
-            }
-
-            try
-            {
-                using (StreamReader reader = new StreamReader("turbos.csv"))
-                using (CsvParser csv = new CsvParser(reader))
-                {
-                    while (true)
-                    {
-                        string[] row = csv.Read();
-                        if (row == null)
-                        {
-                            break;
-                        }
-                        else
-                        {
-                            turbos.Add(new KeyValuePair<string, string>(row[0], row[1]));
-                        }
-                    }
-                }
-
-                foreach (KeyValuePair<string, string> turbo in turbos)
-                {
-                    cboTurbo.Items.Add(turbo.Key);
-                }
-
-                cboTurbo.SelectedIndex = 0;
-            }
-            catch (FileNotFoundException)
-            {
-                MessageBox.Show("File 'turbos.csv' not found. Please ensure this file is in the working directory and try again.", "File not found", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                Application.Exit();
-            }
-
-            csvsLoaded = true;
-
-        }
-
         private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (tabControl1.SelectedIndex == 2)
             {
-                if (drivetrains.FindIndex(x => x.Key == selectedDrivetrain) != -1)
+                if (drivetrains.FindIndex(x => x.Value == selectedDrivetrain) != -1)
                 {
-                    cboDrivetrain.SelectedIndex = drivetrains.FindIndex(x => x.Key == selectedDrivetrain);
+                    cboDrivetrain.SelectedIndex = drivetrains.FindIndex(x => x.Value == selectedDrivetrain);
                 }
                 else
                 {
@@ -411,9 +366,9 @@ namespace GT4_Random_Cars
                     btnDrivetrain.Enabled = false;
                 }
 
-                if (engines.FindIndex(x => x.Key == selectedEngine) != -1)
+                if (engines.FindIndex(x => x.Value == selectedEngine) != -1)
                 {
-                    cboEngine.SelectedIndex = engines.FindIndex(x => x.Key == selectedEngine);
+                    cboEngine.SelectedIndex = engines.FindIndex(x => x.Value == selectedEngine);
                 }
                 else
                 {
@@ -421,9 +376,9 @@ namespace GT4_Random_Cars
                     btnEngine.Enabled = false;
                 }
 
-                if (exhausts.FindIndex(x => x.Key == selectedExhaust) != -1)
+                if (exhausts.FindIndex(x => x.Value == selectedExhaust) != -1)
                 {
-                    cboExhaust.SelectedIndex = exhausts.FindIndex(x => x.Key == selectedExhaust);
+                    cboExhaust.SelectedIndex = exhausts.FindIndex(x => x.Value == selectedExhaust);
                 }
                 else
                 {
@@ -431,9 +386,9 @@ namespace GT4_Random_Cars
                     btnExhaust.Enabled = false;
                 }
 
-                if (naTunes.FindIndex(x => x.Key == selectedNATune) != -1)
+                if (naTunes.FindIndex(x => x.Value == selectedNATune) != -1)
                 {
-                    cboNATune.SelectedIndex = naTunes.FindIndex(x => x.Key == selectedNATune);
+                    cboNATune.SelectedIndex = naTunes.FindIndex(x => x.Value == selectedNATune);
                 }
                 else
                 {
@@ -441,9 +396,9 @@ namespace GT4_Random_Cars
                     btnNATune.Enabled = false;
                 }
 
-                if (superchargers.FindIndex(x => x.Key == selectedSupercharger) != -1)
+                if (superchargers.FindIndex(x => x.Value == selectedSupercharger) != -1)
                 {
-                    cboSupercharger.SelectedIndex = superchargers.FindIndex(x => x.Key == selectedSupercharger);
+                    cboSupercharger.SelectedIndex = superchargers.FindIndex(x => x.Value == selectedSupercharger);
                 }
                 else
                 {
@@ -451,9 +406,9 @@ namespace GT4_Random_Cars
                     btnSupercharger.Enabled = false;
                 }
 
-                if (turbos.FindIndex(x => x.Key == selectedTurbo) != -1)
+                if (turbos.FindIndex(x => x.Value == selectedTurbo) != -1)
                 {
-                    cboTurbo.SelectedIndex = turbos.FindIndex(x => x.Key == selectedTurbo);
+                    cboTurbo.SelectedIndex = turbos.FindIndex(x => x.Value == selectedTurbo);
                 }
                 else
                 {
@@ -546,204 +501,52 @@ namespace GT4_Random_Cars
 
         private void btnDrivetrain_Click(object sender, EventArgs e)
         {
-            drivetrain = drivetrains[cboDrivetrain.SelectedIndex].Value;
+            drivetrain = drivetrains[cboDrivetrain.SelectedIndex].Key;
 
             btnDrivetrainClicked = true;
         }
 
         private void btnTurbo_Click(object sender, EventArgs e)
         {
-            turbo = turbos[cboTurbo.SelectedIndex].Value;
+            turbo = turbos[cboTurbo.SelectedIndex].Key;
 
             btnTurboClicked = true;
         }
 
         private void btnSupercharger_Click(object sender, EventArgs e)
         {
-            supercharger = superchargers[cboSupercharger.SelectedIndex].Value;
+            supercharger = superchargers[cboSupercharger.SelectedIndex].Key;
 
             btnSuperchargerClicked = true;
         }
 
         private void btnNATune_Click(object sender, EventArgs e)
         {
-            naTune = naTunes[cboNATune.SelectedIndex].Value;
+            naTune = naTunes[cboNATune.SelectedIndex].Key;
 
             btnNATuneClicked = true;
         }
 
         private void btnExhaust_Click(object sender, EventArgs e)
         {
-            exhaust = exhausts[cboExhaust.SelectedIndex].Value;
+            exhaust = exhausts[cboExhaust.SelectedIndex].Key;
 
             btnExhaustClicked = true;
         }
 
         private void btnEngine_Click(object sender, EventArgs e)
         {
-            engine = engines[cboEngine.SelectedIndex].Value;
+            engine = engines[cboEngine.SelectedIndex].Key;
 
             btnEngineClicked = true;
-        }
-
-        private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
-        {
-            while (true)
-            {
-                int pID = m.getProcIDFromName("pcsx2");
-                bool openProc = false;
-
-                if (pID > 0)
-                {
-                    openProc = m.OpenProcess(pID);
-                }
-
-                if (openProc && csvsLoaded)
-                {
-                    m.writeMemory("0x21FDDCD4", "float", nudFOV.Value.ToString());
-                    m.writeMemory("0x21FE1294", "float", nudFOV.Value.ToString());
-
-                    if (camType == 1)
-                    {
-                        m.writeMemory("0x2034513C", "bytes", "0xF0 0x3F 0x01 0x3C"); // Set to GT3-like chase camera attachment
-                    }
-                    else
-                    {
-                        m.writeMemory("0x2034513C", "bytes", "0x80 0x3F 0x01 0x3C"); // Otherwise back to GT4 default
-                    }
-
-                    if (chkPlrCar.Checked)
-                    {
-                        m.writeMemory("0x20A0BF70", "bytes", "0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00");
-
-                        m.writeMemory("0x20A0BF70", "string", plrCar);
-                    }
-
-                    if (chkTrack.Checked)
-                    {
-                        m.writeMemory("0x20A0BE94", "bytes", "0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00");
-
-                        m.writeMemory("0x20A0BE94", "string", track);
-                    }
-
-                    if (chkCar.Checked)
-                    {
-
-                        // If generating a new set of cars, null out any existing selection
-                        // This is for if the new car string is shorter than prev (e.g. "VolkswagenGolf" to "AudiTT" would result in "AudiTTagenGolf" otherwise)
-                        m.writeMemory("0x20A0BFD8", "bytes", "0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00");
-                        m.writeMemory("0x20A0C040", "bytes", "0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00");
-                        m.writeMemory("0x20A0C0A8", "bytes", "0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00");
-                        m.writeMemory("0x20A0C110", "bytes", "0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00");
-                        m.writeMemory("0x20A0C178", "bytes", "0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00");
-
-                        m.writeMemory("0x20A0BFD8", "string", oppCar1);
-                        m.writeMemory("0x20A0C040", "string", oppCar2);
-                        m.writeMemory("0x20A0C0A8", "string", oppCar3);
-                        m.writeMemory("0x20A0C110", "string", oppCar4);
-                        m.writeMemory("0x20A0C178", "string", oppCar5);
-                    }
-
-                    //-----------This is messy and needs to be a function/loop---------------
-
-                    cboPopulator = ByteArrayToString(m.readBytes("0x20A1F810", 4));
-                    cboPopulator = cboPopulator.Substring(2, 2) + cboPopulator.Substring(0, 2); 
-                    selectedDrivetrain = drivetrains.FirstOrDefault(x => x.Value == cboPopulator).Key;
-
-                    cboPopulator = ByteArrayToString(m.readBytes("0x20A1F808", 4));
-                    cboPopulator = cboPopulator.Substring(2, 2) + cboPopulator.Substring(0, 2);
-                    selectedEngine = engines.FirstOrDefault(x => x.Value == cboPopulator).Key;
-
-                    cboPopulator = ByteArrayToString(m.readBytes("0x20A1F8A0", 4));
-                    cboPopulator = cboPopulator.Substring(2, 2) + cboPopulator.Substring(0, 2);
-                    selectedExhaust = exhausts.FirstOrDefault(x => x.Value == cboPopulator).Key;
-
-                    cboPopulator = ByteArrayToString(m.readBytes("0x20A1F878", 4));
-                    cboPopulator = cboPopulator.Substring(2, 2) + cboPopulator.Substring(0, 2);
-                    selectedNATune = naTunes.FirstOrDefault(x => x.Value == cboPopulator).Key;
-
-                    cboPopulator = ByteArrayToString(m.readBytes("0x20A1F8D8", 4));
-                    cboPopulator = cboPopulator.Substring(2, 2) + cboPopulator.Substring(0, 2);
-                    selectedSupercharger = superchargers.FirstOrDefault(x => x.Value == cboPopulator).Key;
-
-                    cboPopulator = ByteArrayToString(m.readBytes("0x20A1F880", 4));
-                    cboPopulator = cboPopulator.Substring(2, 2) + cboPopulator.Substring(0, 2);
-                    selectedTurbo = turbos.FirstOrDefault(x => x.Value == cboPopulator).Key;
-
-                    //-----------------------------------------------------------------------
-
-                    if (btnDrivetrainClicked)
-                    {
-                        memWrite1 = "0x" + drivetrain.Substring(2,2);
-                        memWrite2 = "0x" + drivetrain.Substring(0,2);
-                        m.writeMemory("0x20A1F810", "bytes", "0x00 0x00 0x00 0x00");
-
-                        m.writeMemory("0x20A1F810", "bytes", memWrite1 + " " + memWrite2);
-
-                        btnDrivetrainClicked = false;
-                    }
-
-                    if (btnEngineClicked)
-                    {
-                        memWrite1 = "0x" + engine.Substring(2, 2);
-                        memWrite2 = "0x" + engine.Substring(0, 2);
-                        m.writeMemory("0x20A1F808", "bytes", "0x00 0x00 0x00 0x00");
-
-                        m.writeMemory("0x20A1F808", "bytes", memWrite1 + " " + memWrite2);
-
-                        btnEngineClicked = false;
-                    }
-
-                    if (btnExhaustClicked)
-                    {
-                        memWrite1 = "0x" + exhaust.Substring(2, 2);
-                        memWrite2 = "0x" + exhaust.Substring(0, 2);
-                        m.writeMemory("0x20A1F8A0", "bytes", "0x00 0x00 0x00 0x00");
-
-                        m.writeMemory("0x20A1F8A0", "bytes", memWrite1 + " " + memWrite2);
-
-                        btnExhaustClicked = false;
-                    }
-
-                    if (btnNATuneClicked)
-                    {
-                        memWrite1 = "0x" + naTune.Substring(2, 2);
-                        memWrite2 = "0x" + naTune.Substring(0, 2);
-                        m.writeMemory("0x20A1F878", "bytes", "0x00 0x00 0x00 0x00");
-
-                        m.writeMemory("0x20A1F878", "bytes", memWrite1 + " " + memWrite2);
-
-                        btnNATuneClicked = false;
-                    }
-
-                    if (btnSuperchargerClicked)
-                    {
-                        memWrite1 = "0x" + supercharger.Substring(2, 2);
-                        memWrite2 = "0x" + supercharger.Substring(0, 2);
-                        m.writeMemory("0x20A1F8D8", "bytes", "0x00 0x00 0x00 0x00");
-
-                        m.writeMemory("0x20A1F8D8", "bytes", memWrite1 + " " + memWrite2);
-
-                        btnSuperchargerClicked = false;
-                    }
-
-                    if (btnTurboClicked)
-                    {
-                        memWrite1 = "0x" + turbo.Substring(2, 2);
-                        memWrite2 = "0x" + turbo.Substring(0, 2);
-                        m.writeMemory("0x20A1F880", "bytes", "0x00 0x00 0x00 0x00");
-
-                        m.writeMemory("0x20A1F880", "bytes", memWrite1 + " " + memWrite2);
-
-                        btnTurboClicked = false;
-                    }
-                }
-            }
         }
 
         private void cboCameraType_SelectedIndexChanged(object sender, EventArgs e)
         {
             camType = cboCameraType.SelectedIndex;
+
+            GT4_Tools.Properties.Settings.Default.CameraSetting = camType;
+            GT4_Tools.Properties.Settings.Default.Save();
         }
 
         public static string ByteArrayToString(byte[] ba)
@@ -751,6 +554,43 @@ namespace GT4_Random_Cars
             return BitConverter.ToString(ba).Replace("-", "");
         }
 
+        public List<KeyValuePair<string, string>> LoadCSV(string csvFile, bool flippedString)
+        {
+            List<KeyValuePair<string, string>> list = new List<KeyValuePair<string, string>>();
 
+            try
+            {
+                using (StreamReader reader = new StreamReader(csvFile + ".csv"))
+                using (CsvParser csv = new CsvParser(reader))
+                {
+                    while (true)
+                    {
+                        string[] row = csv.Read();
+                        if (row == null)
+                        {
+                            break;
+                        }
+                        else
+                        {
+                            if (flippedString)
+                            {
+                                list.Add(new KeyValuePair<string, string>(row[1], row[0]));
+                            }
+                            else
+                            {
+                                list.Add(new KeyValuePair<string, string>(row[0], row[1]));
+                            }
+                        }
+                    }
+                }
+            }
+            catch (FileNotFoundException)
+            {
+                MessageBox.Show("File '" + csvFile + ".csv' not found. Please ensure this file is in the working directory and try again.", "File not found", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Application.Exit();
+            }
+
+            return list;
+        }
     }
 }
