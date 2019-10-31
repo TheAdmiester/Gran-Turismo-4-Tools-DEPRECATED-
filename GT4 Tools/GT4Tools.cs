@@ -40,8 +40,8 @@ namespace GT4_Tools
 
         private void GT4Tools_Load(object sender, EventArgs e)
         {
-            nudFOV.Value = GT4_Tools.Properties.Settings.Default.FOV;
-            cboCameraType.SelectedIndex = GT4_Tools.Properties.Settings.Default.CameraSetting;
+            nudFOV.Value = Properties.Settings.Default.FOV;
+            cboCameraType.SelectedIndex = Properties.Settings.Default.CameraSetting;
 
             if (!backgroundWorker1.IsBusy)
             {
@@ -177,33 +177,12 @@ namespace GT4_Tools
                         m.writeMemory("0x20A0C178", "string", oppCar5);
                     }
 
-                    //-----------This is messy and needs to be a function/loop---------------
-
-                    cboPopulator = ByteArrayToString(m.readBytes("0x20A1F810", 4));
-                    cboPopulator = cboPopulator.Substring(2, 2) + cboPopulator.Substring(0, 2); 
-                    selectedDrivetrain = drivetrains.FirstOrDefault(x => x.Key == cboPopulator).Value;
-
-                    cboPopulator = ByteArrayToString(m.readBytes("0x20A1F808", 4));
-                    cboPopulator = cboPopulator.Substring(2, 2) + cboPopulator.Substring(0, 2);
-                    selectedEngine = engines.FirstOrDefault(x => x.Key == cboPopulator).Value;
-
-                    cboPopulator = ByteArrayToString(m.readBytes("0x20A1F8A0", 4));
-                    cboPopulator = cboPopulator.Substring(2, 2) + cboPopulator.Substring(0, 2);
-                    selectedExhaust = exhausts.FirstOrDefault(x => x.Key == cboPopulator).Value;
-
-                    cboPopulator = ByteArrayToString(m.readBytes("0x20A1F878", 4));
-                    cboPopulator = cboPopulator.Substring(2, 2) + cboPopulator.Substring(0, 2);
-                    selectedNATune = naTunes.FirstOrDefault(x => x.Key == cboPopulator).Value;
-
-                    cboPopulator = ByteArrayToString(m.readBytes("0x20A1F8D8", 4));
-                    cboPopulator = cboPopulator.Substring(2, 2) + cboPopulator.Substring(0, 2);
-                    selectedSupercharger = superchargers.FirstOrDefault(x => x.Key == cboPopulator).Value;
-
-                    cboPopulator = ByteArrayToString(m.readBytes("0x20A1F880", 4));
-                    cboPopulator = cboPopulator.Substring(2, 2) + cboPopulator.Substring(0, 2);
-                    selectedTurbo = turbos.FirstOrDefault(x => x.Key == cboPopulator).Value;
-
-                    //-----------------------------------------------------------------------
+                    selectedDrivetrain = GetExistingPart("0x20A1F810", drivetrains);
+                    selectedEngine = GetExistingPart("0x20A1F808", engines);                    
+                    selectedExhaust = GetExistingPart("0x20A1F8A0", exhausts);                    
+                    selectedNATune = GetExistingPart("0x20A1F878", naTunes);                    
+                    selectedSupercharger = GetExistingPart("0x20A1F8D8", superchargers);                    
+                    selectedTurbo = GetExistingPart("0x20A1F880", turbos);
 
                     if (btnDrivetrainClicked)
                     {
@@ -276,8 +255,8 @@ namespace GT4_Tools
 
         private void nudFOV_ValueChanged(object sender, EventArgs e)
         {
-            GT4_Tools.Properties.Settings.Default.FOV = (int)nudFOV.Value;
-            GT4_Tools.Properties.Settings.Default.Save();
+            Properties.Settings.Default.FOV = (int)nudFOV.Value;
+            Properties.Settings.Default.Save();
         }
 
         private void cboTurbo_SelectedIndexChanged(object sender, EventArgs e)
@@ -545,13 +524,20 @@ namespace GT4_Tools
         {
             camType = cboCameraType.SelectedIndex;
 
-            GT4_Tools.Properties.Settings.Default.CameraSetting = camType;
-            GT4_Tools.Properties.Settings.Default.Save();
+            Properties.Settings.Default.CameraSetting = camType;
+            Properties.Settings.Default.Save();
         }
 
         public static string ByteArrayToString(byte[] ba)
         {
             return BitConverter.ToString(ba).Replace("-", "");
+        }
+
+        public string GetExistingPart(string memAddress, List<KeyValuePair<string, string>> listToSearch)
+        {
+            cboPopulator = ByteArrayToString(m.readBytes(memAddress, 4));
+            cboPopulator = cboPopulator.Substring(2, 2) + cboPopulator.Substring(0, 2);
+            return listToSearch.FirstOrDefault(x => x.Key == cboPopulator).Value;
         }
 
         public List<KeyValuePair<string, string>> LoadCSV(string csvFile, bool flippedString)
