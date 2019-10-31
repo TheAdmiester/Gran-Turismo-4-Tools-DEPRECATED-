@@ -91,6 +91,9 @@
             this.chkCar = new System.Windows.Forms.CheckBox();
             this.chkTrack = new System.Windows.Forms.CheckBox();
             this.chkPlrCar = new System.Windows.Forms.CheckBox();
+            this.chkCamera = new System.Windows.Forms.CheckBox();
+            this.groupBox11 = new System.Windows.Forms.GroupBox();
+            this.btnCamera = new System.Windows.Forms.Button();
             this.grpCars.SuspendLayout();
             this.grpTrack.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -110,6 +113,7 @@
             this.tabPage3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudFOV)).BeginInit();
             this.tabPage4.SuspendLayout();
+            this.groupBox11.SuspendLayout();
             this.SuspendLayout();
             // 
             // grpCars
@@ -611,10 +615,7 @@
             // 
             // tabPage3
             // 
-            this.tabPage3.Controls.Add(this.cboCameraType);
-            this.tabPage3.Controls.Add(this.label2);
-            this.tabPage3.Controls.Add(this.label1);
-            this.tabPage3.Controls.Add(this.nudFOV);
+            this.tabPage3.Controls.Add(this.groupBox11);
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Size = new System.Drawing.Size(394, 570);
@@ -629,7 +630,7 @@
             this.cboCameraType.Items.AddRange(new object[] {
             "Default",
             "GT3-like"});
-            this.cboCameraType.Location = new System.Drawing.Point(267, 61);
+            this.cboCameraType.Location = new System.Drawing.Point(250, 59);
             this.cboCameraType.Name = "cboCameraType";
             this.cboCameraType.Size = new System.Drawing.Size(120, 21);
             this.cboCameraType.TabIndex = 3;
@@ -638,7 +639,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(8, 64);
+            this.label2.Location = new System.Drawing.Point(6, 62);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(236, 13);
             this.label2.TabIndex = 2;
@@ -647,7 +648,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(8, 24);
+            this.label1.Location = new System.Drawing.Point(6, 26);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(67, 13);
             this.label1.TabIndex = 1;
@@ -655,7 +656,7 @@
             // 
             // nudFOV
             // 
-            this.nudFOV.Location = new System.Drawing.Point(337, 22);
+            this.nudFOV.Location = new System.Drawing.Point(320, 24);
             this.nudFOV.Maximum = new decimal(new int[] {
             180,
             0,
@@ -759,11 +760,46 @@
             this.chkPlrCar.Text = "Override Player Car (Arcade)";
             this.chkPlrCar.UseVisualStyleBackColor = true;
             // 
+            // chkCamera
+            // 
+            this.chkCamera.AutoSize = true;
+            this.chkCamera.Location = new System.Drawing.Point(12, 671);
+            this.chkCamera.Name = "chkCamera";
+            this.chkCamera.Size = new System.Drawing.Size(146, 17);
+            this.chkCamera.TabIndex = 7;
+            this.chkCamera.Text = "Override Camera Settings";
+            this.chkCamera.UseVisualStyleBackColor = true;
+            // 
+            // groupBox11
+            // 
+            this.groupBox11.Controls.Add(this.btnCamera);
+            this.groupBox11.Controls.Add(this.label1);
+            this.groupBox11.Controls.Add(this.cboCameraType);
+            this.groupBox11.Controls.Add(this.label2);
+            this.groupBox11.Controls.Add(this.nudFOV);
+            this.groupBox11.Location = new System.Drawing.Point(8, 3);
+            this.groupBox11.Name = "groupBox11";
+            this.groupBox11.Size = new System.Drawing.Size(379, 137);
+            this.groupBox11.TabIndex = 4;
+            this.groupBox11.TabStop = false;
+            this.groupBox11.Text = "Camera Settings";
+            // 
+            // btnCamera
+            // 
+            this.btnCamera.Location = new System.Drawing.Point(249, 86);
+            this.btnCamera.Name = "btnCamera";
+            this.btnCamera.Size = new System.Drawing.Size(121, 38);
+            this.btnCamera.TabIndex = 8;
+            this.btnCamera.Text = "Apply";
+            this.btnCamera.UseVisualStyleBackColor = true;
+            this.btnCamera.Click += new System.EventHandler(this.btnCamera_Click);
+            // 
             // GT4Tools
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(403, 674);
+            this.ClientSize = new System.Drawing.Size(403, 698);
+            this.Controls.Add(this.chkCamera);
             this.Controls.Add(this.chkPlrCar);
             this.Controls.Add(this.chkTrack);
             this.Controls.Add(this.chkCar);
@@ -794,10 +830,11 @@
             this.groupBox6.ResumeLayout(false);
             this.groupBox5.ResumeLayout(false);
             this.tabPage3.ResumeLayout(false);
-            this.tabPage3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudFOV)).EndInit();
             this.tabPage4.ResumeLayout(false);
             this.tabPage4.PerformLayout();
+            this.groupBox11.ResumeLayout(false);
+            this.groupBox11.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -868,6 +905,9 @@
         private System.Windows.Forms.GroupBox groupBox5;
         private System.Windows.Forms.ComboBox cboDrivetrain;
         private System.Windows.Forms.Button btnDrivetrain;
+        private System.Windows.Forms.GroupBox groupBox11;
+        private System.Windows.Forms.Button btnCamera;
+        private System.Windows.Forms.CheckBox chkCamera;
     }
 }
 

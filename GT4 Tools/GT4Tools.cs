@@ -133,16 +133,19 @@ namespace GT4_Tools
 
                 if (openProc && csvsLoaded)
                 {
-                    m.writeMemory("0x21FDDCD4", "float", nudFOV.Value.ToString());
-                    m.writeMemory("0x21FE1294", "float", nudFOV.Value.ToString());
+                    if (chkCamera.Checked)
+                    {
+                        m.writeMemory("0x21FDDCD4", "float", nudFOV.Value.ToString());
+                        m.writeMemory("0x21FE1294", "float", nudFOV.Value.ToString());
 
-                    if (camType == 1)
-                    {
-                        m.writeMemory("0x2034513C", "bytes", "0xF0 0x3F 0x01 0x3C"); // Set to GT3-like chase camera attachment
-                    }
-                    else
-                    {
-                        m.writeMemory("0x2034513C", "bytes", "0x80 0x3F 0x01 0x3C"); // Otherwise back to GT4 default
+                        if (camType == 1)
+                        {
+                            m.writeMemory("0x2034513C", "bytes", "0xF0 0x3F 0x01 0x3C"); // Set to GT3-like chase camera attachment
+                        }
+                        else
+                        {
+                            m.writeMemory("0x2034513C", "bytes", "0x80 0x3F 0x01 0x3C"); // Otherwise back to GT4 default
+                        }
                     }
 
                     if (chkPlrCar.Checked)
@@ -251,6 +254,12 @@ namespace GT4_Tools
                     }
                 }
             }
+        }
+
+
+        private void btnCamera_Click(object sender, EventArgs e)
+        {
+            chkCamera.Checked = true;
         }
 
         private void nudFOV_ValueChanged(object sender, EventArgs e)
@@ -535,6 +544,7 @@ namespace GT4_Tools
 
         public string GetExistingPart(string memAddress, List<KeyValuePair<string, string>> listToSearch)
         {
+            // Read the memory of the existing part, flip the two bytes (e.g. 1234 -> 3412)
             cboPopulator = ByteArrayToString(m.readBytes(memAddress, 4));
             cboPopulator = cboPopulator.Substring(2, 2) + cboPopulator.Substring(0, 2);
             return listToSearch.FirstOrDefault(x => x.Key == cboPopulator).Value;
