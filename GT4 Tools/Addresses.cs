@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GT4_Tools
 {
-    public static class Mem
+    public static class Addresses
     {
         // Hybrid parts (current car)
         public static string MEM_DRV = "0x20A1F810"; // Drivetrain

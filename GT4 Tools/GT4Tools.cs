@@ -104,41 +104,41 @@ namespace GT4_Tools
 
                 if (openProc && csvsLoaded)
                 {
-                    selectedDrivetrain = GetExistingPart(Mem.MEM_DRV, drivetrains);
-                    selectedEngine = GetExistingPart(Mem.MEM_ENG, engines);
-                    selectedExhaust = GetExistingPart(Mem.MEM_EXH, exhausts);
-                    selectedNATune = GetExistingPart(Mem.MEM_NAT, naTunes);
-                    selectedSupercharger = GetExistingPart(Mem.MEM_SPR, superchargers);
-                    selectedTurbo = GetExistingPart(Mem.MEM_TRB, turbos);
+                    selectedDrivetrain = GetExistingPart(Addresses.MEM_DRV, drivetrains);
+                    selectedEngine = GetExistingPart(Addresses.MEM_ENG, engines);
+                    selectedExhaust = GetExistingPart(Addresses.MEM_EXH, exhausts);
+                    selectedNATune = GetExistingPart(Addresses.MEM_NAT, naTunes);
+                    selectedSupercharger = GetExistingPart(Addresses.MEM_SPR, superchargers);
+                    selectedTurbo = GetExistingPart(Addresses.MEM_TRB, turbos);
 
                     if (chkCamera.Checked)
                     {
-                        m.writeMemory(Mem.MEM_FOVA, "float", nudFOV.Value.ToString()); // Arcade mode FOV
-                        m.writeMemory(Mem.MEM_FOVG, "float", nudFOV.Value.ToString()); // GT Mode FOV
-                        m.writeMemory(Mem.MEM_FOVS, "float", nudFOV.Value.ToString()); // Special Condition Race FOV
+                        m.writeMemory(Addresses.MEM_FOVA, "float", nudFOV.Value.ToString()); // Arcade mode FOV
+                        m.writeMemory(Addresses.MEM_FOVG, "float", nudFOV.Value.ToString()); // GT Mode FOV
+                        m.writeMemory(Addresses.MEM_FOVS, "float", nudFOV.Value.ToString()); // Special Condition Race FOV
 
                         if (camType == 1)
                         {
-                            m.writeMemory(Mem.MEM_CAM, "bytes", "0xF0 0x3F 0x01 0x3C"); // Set to GT3-like chase camera attachment
+                            m.writeMemory(Addresses.MEM_CAM, "bytes", "0xF0 0x3F 0x01 0x3C"); // Set to GT3-like chase camera attachment
                         }
                         else
                         {
-                            m.writeMemory(Mem.MEM_CAM, "bytes", "0x80 0x3F 0x01 0x3C"); // Otherwise back to GT4 default
+                            m.writeMemory(Addresses.MEM_CAM, "bytes", "0x80 0x3F 0x01 0x3C"); // Otherwise back to GT4 default
                         }
                     }
 
                     if (chkPlrCar.Checked)
                     {
-                        m.writeMemory(Mem.MEM_PLR, "bytes", "0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00");
+                        m.writeMemory(Addresses.MEM_PLR, "bytes", "0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00");
 
-                        m.writeMemory(Mem.MEM_PLR, "string", plrCar);
+                        m.writeMemory(Addresses.MEM_PLR, "string", plrCar);
                     }
 
                     if (chkTrack.Checked)
                     {
-                        m.writeMemory(Mem.MEM_TRK, "bytes", "0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00");
+                        m.writeMemory(Addresses.MEM_TRK, "bytes", "0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00");
 
-                        m.writeMemory(Mem.MEM_TRK, "string", track);
+                        m.writeMemory(Addresses.MEM_TRK, "string", track);
                     }
 
                     if (chkCar.Checked)
@@ -146,25 +146,25 @@ namespace GT4_Tools
 
                         // If generating a new set of cars, null out any existing selection
                         // This is for if the new car string is shorter than prev (e.g. "VolkswagenGolf" to "AudiTT" would result in "AudiTTagenGolf" otherwise)
-                        m.writeMemory(Mem.MEM_CR1, "bytes", "0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00");
-                        m.writeMemory(Mem.MEM_CR2, "bytes", "0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00");
-                        m.writeMemory(Mem.MEM_CR3, "bytes", "0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00");
-                        m.writeMemory(Mem.MEM_CR4, "bytes", "0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00");
-                        m.writeMemory(Mem.MEM_CR5, "bytes", "0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00");
+                        m.writeMemory(Addresses.MEM_CR1, "bytes", "0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00");
+                        m.writeMemory(Addresses.MEM_CR2, "bytes", "0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00");
+                        m.writeMemory(Addresses.MEM_CR3, "bytes", "0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00");
+                        m.writeMemory(Addresses.MEM_CR4, "bytes", "0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00");
+                        m.writeMemory(Addresses.MEM_CR5, "bytes", "0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00");
 
-                        m.writeMemory(Mem.MEM_CR1, "string", oppCar1);
-                        m.writeMemory(Mem.MEM_CR2, "string", oppCar2);
-                        m.writeMemory(Mem.MEM_CR3, "string", oppCar3);
-                        m.writeMemory(Mem.MEM_CR4, "string", oppCar4);
-                        m.writeMemory(Mem.MEM_CR5, "string", oppCar5);
+                        m.writeMemory(Addresses.MEM_CR1, "string", oppCar1);
+                        m.writeMemory(Addresses.MEM_CR2, "string", oppCar2);
+                        m.writeMemory(Addresses.MEM_CR3, "string", oppCar3);
+                        m.writeMemory(Addresses.MEM_CR4, "string", oppCar4);
+                        m.writeMemory(Addresses.MEM_CR5, "string", oppCar5);
                     }
 
                     if (btnDrivetrainClicked)
                     {
                         memWrite = MakeMemorySubstring(drivetrain);
-                        m.writeMemory(Mem.MEM_DRV, "bytes", "0x00 0x00 0x00 0x00");
+                        m.writeMemory(Addresses.MEM_DRV, "bytes", "0x00 0x00 0x00 0x00");
 
-                        m.writeMemory(Mem.MEM_DRV, "bytes", memWrite);
+                        m.writeMemory(Addresses.MEM_DRV, "bytes", memWrite);
 
                         btnDrivetrainClicked = false;
                     }
@@ -172,9 +172,9 @@ namespace GT4_Tools
                     if (btnEngineClicked)
                     {
                         memWrite = MakeMemorySubstring(engine);
-                        m.writeMemory(Mem.MEM_ENG, "bytes", "0x00 0x00 0x00 0x00");
+                        m.writeMemory(Addresses.MEM_ENG, "bytes", "0x00 0x00 0x00 0x00");
 
-                        m.writeMemory(Mem.MEM_ENG, "bytes", memWrite);
+                        m.writeMemory(Addresses.MEM_ENG, "bytes", memWrite);
 
                         btnEngineClicked = false;
                     }
@@ -182,9 +182,9 @@ namespace GT4_Tools
                     if (btnExhaustClicked)
                     {
                         memWrite = MakeMemorySubstring(exhaust);
-                        m.writeMemory(Mem.MEM_EXH, "bytes", "0x00 0x00 0x00 0x00");
+                        m.writeMemory(Addresses.MEM_EXH, "bytes", "0x00 0x00 0x00 0x00");
 
-                        m.writeMemory(Mem.MEM_EXH, "bytes", memWrite);
+                        m.writeMemory(Addresses.MEM_EXH, "bytes", memWrite);
 
                         btnExhaustClicked = false;
                     }
@@ -192,9 +192,9 @@ namespace GT4_Tools
                     if (btnNATuneClicked)
                     {
                         memWrite = MakeMemorySubstring(naTune);
-                        m.writeMemory(Mem.MEM_NAT, "bytes", "0x00 0x00 0x00 0x00");
+                        m.writeMemory(Addresses.MEM_NAT, "bytes", "0x00 0x00 0x00 0x00");
 
-                        m.writeMemory(Mem.MEM_NAT, "bytes", memWrite);
+                        m.writeMemory(Addresses.MEM_NAT, "bytes", memWrite);
 
                         btnNATuneClicked = false;
                     }
@@ -202,9 +202,9 @@ namespace GT4_Tools
                     if (btnSuperchargerClicked)
                     {
                         memWrite = MakeMemorySubstring(supercharger);
-                        m.writeMemory(Mem.MEM_SPR, "bytes", "0x00 0x00 0x00 0x00");
+                        m.writeMemory(Addresses.MEM_SPR, "bytes", "0x00 0x00 0x00 0x00");
 
-                        m.writeMemory(Mem.MEM_SPR, "bytes", memWrite);
+                        m.writeMemory(Addresses.MEM_SPR, "bytes", memWrite);
 
                         btnSuperchargerClicked = false;
                     }
@@ -212,9 +212,9 @@ namespace GT4_Tools
                     if (btnTurboClicked)
                     {
                         memWrite = MakeMemorySubstring(turbo);
-                        m.writeMemory(Mem.MEM_TRB, "bytes", "0x00 0x00 0x00 0x00");
+                        m.writeMemory(Addresses.MEM_TRB, "bytes", "0x00 0x00 0x00 0x00");
 
-                        m.writeMemory(Mem.MEM_TRB, "bytes", memWrite);
+                        m.writeMemory(Addresses.MEM_TRB, "bytes", memWrite);
 
                         btnTurboClicked = false;
                     }
