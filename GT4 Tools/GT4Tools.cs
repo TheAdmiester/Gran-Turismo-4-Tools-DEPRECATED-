@@ -15,7 +15,9 @@ namespace GT4_Tools
 {
     public partial class GT4Tools : Form
     {
-        Mem m = new Mem();
+        Memory.Mem m = new Memory.Mem();
+        List<ComboBox> cboList1 = new List<ComboBox>();
+        List<ComboBox> cboList2 = new List<ComboBox>();
         List<KeyValuePair<string, string>> cars = new List<KeyValuePair<string, string>>();
         List<KeyValuePair<string, string>> tracks = new List<KeyValuePair<string, string>>();
         List<KeyValuePair<string, string>> drivetrains = new List<KeyValuePair<string, string>>();
@@ -24,6 +26,7 @@ namespace GT4_Tools
         List<KeyValuePair<string, string>> naTunes = new List<KeyValuePair<string, string>>();
         List<KeyValuePair<string, string>> superchargers = new List<KeyValuePair<string, string>>();
         List<KeyValuePair<string, string>> turbos = new List<KeyValuePair<string, string>>();
+        List<List<KeyValuePair<string, string>>> globalList = new List<List<KeyValuePair<string, string>>>();
         List<TextBox> txtCars = new List<TextBox>();
         Random random = new Random();
         int rnd = 0, camType = 0;
@@ -72,59 +75,19 @@ namespace GT4_Tools
 
             csvsLoaded = true;
 
-            foreach (KeyValuePair<string, string> car in cars)
+            PopulateGlobalList(tracks, drivetrains, engines, exhausts, naTunes, superchargers, turbos);
+            PopulateCboList(cboList1, cboPlrCar, cboCar1, cboCar2, cboCar3, cboCar4, cboCar5);
+            PopulateCboList(cboList2, cboTrack, cboDrivetrain, cboEngine, cboExhaust, cboNATune, cboSupercharger, cboTurbo);
+ 
+            foreach (ComboBox cbo in cboList1)
             {
-                cboPlrCar.Items.Add(car.Value);
-                cboCar1.Items.Add(car.Value);
-                cboCar2.Items.Add(car.Value);
-                cboCar3.Items.Add(car.Value);
-                cboCar4.Items.Add(car.Value);
-                cboCar5.Items.Add(car.Value);
+                PopulateComboBox(cbo, cars);
             }
 
-            foreach (KeyValuePair<string, string> track in tracks)
+            for (int i = 0; i < cboList2.Count; i++)
             {
-                cboTrack.Items.Add(track.Value);
+                PopulateComboBox(cboList2[i], globalList[i]);
             }
-
-            foreach (KeyValuePair<string, string> drivetrain in drivetrains)
-            {
-                cboDrivetrain.Items.Add(drivetrain.Value);
-            }
-
-            foreach (KeyValuePair<string, string> engine in engines)
-            {
-                cboEngine.Items.Add(engine.Value);
-            }
-
-            foreach (KeyValuePair<string, string> exhaust in exhausts)
-            {
-                cboExhaust.Items.Add(exhaust.Value);
-            }
-
-            foreach (KeyValuePair<string, string> naTune in naTunes)
-            {
-                cboNATune.Items.Add(naTune.Value);
-            }
-
-            foreach (KeyValuePair<string, string> supercharger in superchargers)
-            {
-                cboSupercharger.Items.Add(supercharger.Value);
-            }
-
-            foreach (KeyValuePair<string, string> turbo in turbos)
-            {
-                cboTurbo.Items.Add(turbo.Value);
-            }
-
-            cboPlrCar.SelectedIndex = 0;
-            cboCar1.SelectedIndex = 0;
-            cboCar2.SelectedIndex = 0;
-            cboCar3.SelectedIndex = 0;
-            cboCar4.SelectedIndex = 0;
-            cboCar5.SelectedIndex = 0;
-            cboTrack.SelectedIndex = 0;
-
         }
 
         private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
@@ -141,41 +104,41 @@ namespace GT4_Tools
 
                 if (openProc && csvsLoaded)
                 {
-                    selectedDrivetrain = GetExistingPart("0x20A1F810", drivetrains);
-                    selectedEngine = GetExistingPart("0x20A1F808", engines);
-                    selectedExhaust = GetExistingPart("0x20A1F8A0", exhausts);
-                    selectedNATune = GetExistingPart("0x20A1F878", naTunes);
-                    selectedSupercharger = GetExistingPart("0x20A1F8D8", superchargers);
-                    selectedTurbo = GetExistingPart("0x20A1F880", turbos);
+                    selectedDrivetrain = GetExistingPart(Mem.MEM_DRV, drivetrains);
+                    selectedEngine = GetExistingPart(Mem.MEM_ENG, engines);
+                    selectedExhaust = GetExistingPart(Mem.MEM_EXH, exhausts);
+                    selectedNATune = GetExistingPart(Mem.MEM_NAT, naTunes);
+                    selectedSupercharger = GetExistingPart(Mem.MEM_SPR, superchargers);
+                    selectedTurbo = GetExistingPart(Mem.MEM_TRB, turbos);
 
                     if (chkCamera.Checked)
                     {
-                        m.writeMemory("0x21FDDCD4", "float", nudFOV.Value.ToString()); // Arcade mode FOV
-                        m.writeMemory("0x21FE1294", "float", nudFOV.Value.ToString()); // GT Mode FOV
-                        m.writeMemory("0x21FC2914", "float", nudFOV.Value.ToString()); // Special Condition Race FOV
+                        m.writeMemory(Mem.MEM_FOVA, "float", nudFOV.Value.ToString()); // Arcade mode FOV
+                        m.writeMemory(Mem.MEM_FOVG, "float", nudFOV.Value.ToString()); // GT Mode FOV
+                        m.writeMemory(Mem.MEM_FOVS, "float", nudFOV.Value.ToString()); // Special Condition Race FOV
 
                         if (camType == 1)
                         {
-                            m.writeMemory("0x2034513C", "bytes", "0xF0 0x3F 0x01 0x3C"); // Set to GT3-like chase camera attachment
+                            m.writeMemory(Mem.MEM_CAM, "bytes", "0xF0 0x3F 0x01 0x3C"); // Set to GT3-like chase camera attachment
                         }
                         else
                         {
-                            m.writeMemory("0x2034513C", "bytes", "0x80 0x3F 0x01 0x3C"); // Otherwise back to GT4 default
+                            m.writeMemory(Mem.MEM_CAM, "bytes", "0x80 0x3F 0x01 0x3C"); // Otherwise back to GT4 default
                         }
                     }
 
                     if (chkPlrCar.Checked)
                     {
-                        m.writeMemory("0x20A0BF70", "bytes", "0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00");
+                        m.writeMemory(Mem.MEM_PLR, "bytes", "0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00");
 
-                        m.writeMemory("0x20A0BF70", "string", plrCar);
+                        m.writeMemory(Mem.MEM_PLR, "string", plrCar);
                     }
 
                     if (chkTrack.Checked)
                     {
-                        m.writeMemory("0x20A0BE94", "bytes", "0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00");
+                        m.writeMemory(Mem.MEM_TRK, "bytes", "0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00");
 
-                        m.writeMemory("0x20A0BE94", "string", track);
+                        m.writeMemory(Mem.MEM_TRK, "string", track);
                     }
 
                     if (chkCar.Checked)
@@ -183,25 +146,25 @@ namespace GT4_Tools
 
                         // If generating a new set of cars, null out any existing selection
                         // This is for if the new car string is shorter than prev (e.g. "VolkswagenGolf" to "AudiTT" would result in "AudiTTagenGolf" otherwise)
-                        m.writeMemory("0x20A0BFD8", "bytes", "0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00");
-                        m.writeMemory("0x20A0C040", "bytes", "0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00");
-                        m.writeMemory("0x20A0C0A8", "bytes", "0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00");
-                        m.writeMemory("0x20A0C110", "bytes", "0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00");
-                        m.writeMemory("0x20A0C178", "bytes", "0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00");
+                        m.writeMemory(Mem.MEM_CR1, "bytes", "0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00");
+                        m.writeMemory(Mem.MEM_CR2, "bytes", "0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00");
+                        m.writeMemory(Mem.MEM_CR3, "bytes", "0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00");
+                        m.writeMemory(Mem.MEM_CR4, "bytes", "0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00");
+                        m.writeMemory(Mem.MEM_CR5, "bytes", "0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00");
 
-                        m.writeMemory("0x20A0BFD8", "string", oppCar1);
-                        m.writeMemory("0x20A0C040", "string", oppCar2);
-                        m.writeMemory("0x20A0C0A8", "string", oppCar3);
-                        m.writeMemory("0x20A0C110", "string", oppCar4);
-                        m.writeMemory("0x20A0C178", "string", oppCar5);
+                        m.writeMemory(Mem.MEM_CR1, "string", oppCar1);
+                        m.writeMemory(Mem.MEM_CR2, "string", oppCar2);
+                        m.writeMemory(Mem.MEM_CR3, "string", oppCar3);
+                        m.writeMemory(Mem.MEM_CR4, "string", oppCar4);
+                        m.writeMemory(Mem.MEM_CR5, "string", oppCar5);
                     }
 
                     if (btnDrivetrainClicked)
                     {
                         memWrite = MakeMemorySubstring(drivetrain);
-                        m.writeMemory("0x20A1F810", "bytes", "0x00 0x00 0x00 0x00");
+                        m.writeMemory(Mem.MEM_DRV, "bytes", "0x00 0x00 0x00 0x00");
 
-                        m.writeMemory("0x20A1F810", "bytes", memWrite);
+                        m.writeMemory(Mem.MEM_DRV, "bytes", memWrite);
 
                         btnDrivetrainClicked = false;
                     }
@@ -209,9 +172,9 @@ namespace GT4_Tools
                     if (btnEngineClicked)
                     {
                         memWrite = MakeMemorySubstring(engine);
-                        m.writeMemory("0x20A1F808", "bytes", "0x00 0x00 0x00 0x00");
+                        m.writeMemory(Mem.MEM_ENG, "bytes", "0x00 0x00 0x00 0x00");
 
-                        m.writeMemory("0x20A1F808", "bytes", memWrite);
+                        m.writeMemory(Mem.MEM_ENG, "bytes", memWrite);
 
                         btnEngineClicked = false;
                     }
@@ -219,9 +182,9 @@ namespace GT4_Tools
                     if (btnExhaustClicked)
                     {
                         memWrite = MakeMemorySubstring(exhaust);
-                        m.writeMemory("0x20A1F8A0", "bytes", "0x00 0x00 0x00 0x00");
+                        m.writeMemory(Mem.MEM_EXH, "bytes", "0x00 0x00 0x00 0x00");
 
-                        m.writeMemory("0x20A1F8A0", "bytes", memWrite);
+                        m.writeMemory(Mem.MEM_EXH, "bytes", memWrite);
 
                         btnExhaustClicked = false;
                     }
@@ -229,9 +192,9 @@ namespace GT4_Tools
                     if (btnNATuneClicked)
                     {
                         memWrite = MakeMemorySubstring(naTune);
-                        m.writeMemory("0x20A1F878", "bytes", "0x00 0x00 0x00 0x00");
+                        m.writeMemory(Mem.MEM_NAT, "bytes", "0x00 0x00 0x00 0x00");
 
-                        m.writeMemory("0x20A1F878", "bytes", memWrite);
+                        m.writeMemory(Mem.MEM_NAT, "bytes", memWrite);
 
                         btnNATuneClicked = false;
                     }
@@ -239,9 +202,9 @@ namespace GT4_Tools
                     if (btnSuperchargerClicked)
                     {
                         memWrite = MakeMemorySubstring(supercharger);
-                        m.writeMemory("0x20A1F8D8", "bytes", "0x00 0x00 0x00 0x00");
+                        m.writeMemory(Mem.MEM_SPR, "bytes", "0x00 0x00 0x00 0x00");
 
-                        m.writeMemory("0x20A1F8D8", "bytes", memWrite);
+                        m.writeMemory(Mem.MEM_SPR, "bytes", memWrite);
 
                         btnSuperchargerClicked = false;
                     }
@@ -249,9 +212,9 @@ namespace GT4_Tools
                     if (btnTurboClicked)
                     {
                         memWrite = MakeMemorySubstring(turbo);
-                        m.writeMemory("0x20A1F880", "bytes", "0x00 0x00 0x00 0x00");
+                        m.writeMemory(Mem.MEM_TRB, "bytes", "0x00 0x00 0x00 0x00");
 
-                        m.writeMemory("0x20A1F880", "bytes", memWrite);
+                        m.writeMemory(Mem.MEM_TRB, "bytes", memWrite);
 
                         btnTurboClicked = false;
                     }
@@ -560,6 +523,32 @@ namespace GT4_Tools
             string memAddr2 = "0x" + partString.Substring(0, 2);
 
             return memAddr1 + " " + memAddr2;
+        }
+
+        public void PopulateComboBox(ComboBox comboBox, List<KeyValuePair<string, string>> list)
+        {
+            foreach(KeyValuePair<string, string> item in list)
+            {
+                comboBox.Items.Add(item.Value);
+            }
+
+            comboBox.SelectedIndex = 0;
+        }
+
+        public void PopulateGlobalList(params List<KeyValuePair<string, string>>[] lists)
+        {
+            foreach (List<KeyValuePair<string, string>> list in lists)
+            {
+                globalList.Add(list);
+            }
+        }
+
+        public void PopulateCboList(List<ComboBox> list, params ComboBox[] cbos)
+        {
+            foreach (ComboBox cbo in cbos)
+            {
+                list.Add(cbo);
+            }
         }
 
         public List<KeyValuePair<string, string>> LoadCSV(string csvFile, bool flippedString)
