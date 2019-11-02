@@ -2,7 +2,7 @@
 A tool to simplify the process of memory editing Gran Turismo 4 NTSC on PCSX2. 
 
 # Download
-Latest builds are available in the [releases tab](https://github.com/AJB-Tech/Gran-Turismo-4-Tools/releases)
+Latest builds are available in the [releases tab.](https://github.com/AJB-Tech/Gran-Turismo-4-Tools/releases)
 
 # Features
 - Set a random or custom grid of AI vehicles in Arcade Mode
