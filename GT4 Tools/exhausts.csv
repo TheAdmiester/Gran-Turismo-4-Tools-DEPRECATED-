@@ -474,9 +474,9 @@ Honda DUALNOTE '01 (Racing),0E50,10A1F8A0 00000E50
 Honda ELEMENT '03 (Sports),0A12,10A1F8A0 00000A12 
 Honda ELEMENT '03 (Semi-Racing),0C29,10A1F8A0 00000C29 
 Honda ELEMENT '03 (Racing),0E51,10A1F8A0 00000E51 
-Honda HSC "The 37th Tokyo Motor Show Concept Car" '03 (Sports),0A14,10A1F8A0 00000A14 
-Honda HSC "The 37th Tokyo Motor Show Concept Car" '03 (Semi-Racing),0C2B,10A1F8A0 00000C2B 
-Honda HSC "The 37th Tokyo Motor Show Concept Car" '03 (Racing),0E53,10A1F8A0 00000E53 
+"Honda HSC ""The 37th Tokyo Motor Show Concept Car"" '03 (Sports)",0A14,10A1F8A0 00000A14 
+"Honda HSC ""The 37th Tokyo Motor Show Concept Car"" '03 (Semi-Racing)",0C2B,10A1F8A0 00000C2B 
+"Honda HSC ""The 37th Tokyo Motor Show Concept Car"" '03 (Racing)",0E53,10A1F8A0 00000E53 
 Honda Insight '99 (Sports),0A15,10A1F8A0 00000A15 
 Honda Insight '99 (Semi-Racing),0C2C,10A1F8A0 00000C2C 
 Honda Insight '99 (Racing),0E54,10A1F8A0 00000E54 
@@ -1474,7 +1474,7 @@ RUF 3400S '00 (Semi-Racing),0D4D,10A1F8A0 00000D4D
 RUF 3400S '00 (Racing),0F7A,10A1F8A0 00000F7A 
 RUF BTR '86 (Stock),0970,10A1F8A0 00000970 
 RUF BTR '86 (Racing),0F7B,10A1F8A0 00000F7B 
-RUF CTR "Yellow Bird" '87 (Stock),0983,10A1F8A0 00000983 
+"RUF CTR ""Yellow Bird"" '87 (Stock)",0983,10A1F8A0 00000983 
 RUF CTR2 '96 (Stock),0984,10A1F8A0 00000984 
 RUF RGT '00 (Stock),0971,10A1F8A0 00000971 
 RUF RGT '00 (Racing),0F7C,10A1F8A0 00000F7C 
