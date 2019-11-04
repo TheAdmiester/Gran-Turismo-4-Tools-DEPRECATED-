@@ -638,7 +638,7 @@
             this.groupBox12.Controls.Add(this.chkMarcos);
             this.groupBox12.Location = new System.Drawing.Point(4, 4);
             this.groupBox12.Name = "groupBox12";
-            this.groupBox12.Size = new System.Drawing.Size(383, 375);
+            this.groupBox12.Size = new System.Drawing.Size(383, 90);
             this.groupBox12.TabIndex = 0;
             this.groupBox12.TabStop = false;
             this.groupBox12.Text = "Vehicle Body Swaps";
