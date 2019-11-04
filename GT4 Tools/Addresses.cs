@@ -30,5 +30,17 @@ namespace GT4_Tools
         public static string MEM_CR4 = "0x20A0C110";
         public static string MEM_CR5 = "0x20A0C178";
         public static string MEM_TRK = "0x20A0BE94"; // Track
+
+        // Vehicle bodies
+        public static string MEM_206 = "0x20BBDB8E"; // Peugeot 206 Rally Car
+        public static string MEM_CAL = "0x20BBD690"; // Opel Calibra Touring Car
+        public static string MEM_CRS = "0x20BBD718"; // Opel Corsa
+        public static string MEM_GT1 = "0x20BBF46E"; // Toyota GT-One
+        public static string MEM_MRC = "0x20BBC81E"; // Mini Marcos GT
+        public static string MEM_SPS = "0x20BBD82E"; // Opel Speedster
+        public static string MEM_SPT = "0x20BBD89A"; // Opel Speedster Turbo
+        public static string MEM_SUP = "0x20BBF272"; // Castrol Tom's Supra (2001)
+        public static string MEM_TIG = "0x20BBD622"; // Opel Tigra
+        public static string MEM_VEC = "0x20BBD69C"; // Opel Vectra
     }
 }

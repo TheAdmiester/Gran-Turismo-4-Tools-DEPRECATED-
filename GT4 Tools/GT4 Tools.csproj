@@ -63,7 +63,7 @@
     <Compile Include="GT4Tools.Designer.cs">
       <DependentUpon>GT4Tools.cs</DependentUpon>
     </Compile>
-    <Compile Include="Mem.cs" />
+    <Compile Include="Addresses.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings.cs" />

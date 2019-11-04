@@ -33,6 +33,7 @@ namespace GT4_Tools
         string cboPopulator, memWrite, selectedDrivetrain, selectedEngine, selectedExhaust, selectedNATune, selectedSupercharger, selectedTurbo;
         string drivetrain, engine, exhaust, naTune, supercharger, turbo, oppCar1, oppCar2, oppCar3, oppCar4, oppCar5, oppCarLbl1, oppCarLbl2, oppCarLbl3, oppCarLbl4, oppCarLbl5, plrCar, plrCarLbl, track, trackLbl;
         bool btnDrivetrainClicked, btnEngineClicked, btnExhaustClicked, btnNATuneClicked, btnSuperchargerClicked, btnTurboClicked, csvsLoaded;
+        bool essoClicked, marcosClicked, opelClicked;
 
         public GT4Tools()
         {
@@ -218,10 +219,150 @@ namespace GT4_Tools
 
                         btnTurboClicked = false;
                     }
+
+                    if (essoClicked)
+                    {
+                        if (chkEsso.Checked)
+                        {
+                            m.writeMemory(Addresses.MEM_206, "string", "peug0002");
+                            m.writeMemory(Addresses.MEM_GT1, "string", "toyt0018");
+                            m.writeMemory(Addresses.MEM_SUP, "string", "toyt0035");
+                        }
+                        else
+                        {
+                            m.writeMemory(Addresses.MEM_206, "string", "peug0012");
+                            m.writeMemory(Addresses.MEM_GT1, "string", "toyt0063");
+                            m.writeMemory(Addresses.MEM_SUP, "string", "toyt0027");
+                        }
+
+                        essoClicked = false;
+                    }
+
+                    if (marcosClicked)
+                    {
+                        if (chkMarcos.Checked)
+                        {
+                            m.writeMemory(Addresses.MEM_MRC, "string", "rov10001");
+                        }
+                        else
+                        {
+                            m.writeMemory(Addresses.MEM_MRC, "string", "mrcs0001");
+                        }
+
+                        marcosClicked = false;
+                    }
+
+                    if (opelClicked)
+                    {
+                        if (chkOpel.Checked)
+                        {
+                            m.writeMemory(Addresses.MEM_CAL, "string", "vxhl0002");
+                            m.writeMemory(Addresses.MEM_CRS, "string", "vxhl0003");
+                            m.writeMemory(Addresses.MEM_SPS, "string", "vxhl0005");
+                            m.writeMemory(Addresses.MEM_SPT, "string", "vxhl0006");
+                            m.writeMemory(Addresses.MEM_TIG, "string", "vxhl0004");
+                            m.writeMemory(Addresses.MEM_VEC, "string", "vxhl0007");
+                        }
+                        else
+                        {
+                            m.writeMemory(Addresses.MEM_CAL, "string", "opel0003");
+                            m.writeMemory(Addresses.MEM_CRS, "string", "opel0005");
+                            m.writeMemory(Addresses.MEM_SPS, "string", "opel0006");
+                            m.writeMemory(Addresses.MEM_SPT, "string", "opel0007");
+                            m.writeMemory(Addresses.MEM_TIG, "string", "opel0001");
+                            m.writeMemory(Addresses.MEM_VEC, "string", "opel0004");
+                        }
+                    }
                 }
             }
         }
 
+        public static string ByteArrayToString(byte[] ba)
+        {
+            return BitConverter.ToString(ba).Replace("-", "");
+        }
+
+        public string GetExistingPart(string memAddress, List<KeyValuePair<string, string>> listToSearch)
+        {
+            // Read the memory of the existing part, flip the two bytes (e.g. 1234 -> 3412)
+            cboPopulator = ByteArrayToString(m.readBytes(memAddress, 4));
+            cboPopulator = cboPopulator.Substring(2, 2) + cboPopulator.Substring(0, 2);
+            return listToSearch.FirstOrDefault(x => x.Key == cboPopulator).Value;
+        }
+
+        public string MakeMemorySubstring(string partString)
+        {
+            // Flip endianness of byte pair (e.g. 1234 -> 0x34 0x12)
+            string memAddr1 = "0x" + partString.Substring(2, 2);
+            string memAddr2 = "0x" + partString.Substring(0, 2);
+
+            return memAddr1 + " " + memAddr2;
+        }
+
+        public void PopulateComboBox(ComboBox comboBox, List<KeyValuePair<string, string>> list)
+        {
+            foreach (KeyValuePair<string, string> item in list)
+            {
+                comboBox.Items.Add(item.Value);
+            }
+
+            comboBox.SelectedIndex = 0;
+        }
+
+        public void PopulateGlobalList(params List<KeyValuePair<string, string>>[] lists)
+        {
+            foreach (List<KeyValuePair<string, string>> list in lists)
+            {
+                globalList.Add(list);
+            }
+        }
+
+        public void PopulateCboList(List<ComboBox> list, params ComboBox[] cbos)
+        {
+            foreach (ComboBox cbo in cbos)
+            {
+                list.Add(cbo);
+            }
+        }
+
+        public List<KeyValuePair<string, string>> LoadCSV(string csvFile, bool flippedString)
+        {
+            List<KeyValuePair<string, string>> list = new List<KeyValuePair<string, string>>();
+
+            try
+            {
+                using (StreamReader reader = new StreamReader(csvFile + ".csv"))
+                using (CsvParser csv = new CsvParser(reader))
+                {
+                    while (true)
+                    {
+                        string[] row = csv.Read();
+                        if (row == null)
+                        {
+                            break;
+                        }
+                        else
+                        {
+                            if (flippedString) // Some of the CSVs have the name first, some have the value first - little workaround to load either 
+                            {
+                                list.Add(new KeyValuePair<string, string>(row[1], row[0]));
+                            }
+                            else
+                            {
+                                list.Add(new KeyValuePair<string, string>(row[0], row[1]));
+                            }
+                        }
+                    }
+                }
+            }
+            catch (FileNotFoundException)
+            {
+                MessageBox.Show("File '" + csvFile + ".csv' not found. Please ensure this file is in the working directory and try again.", "File not found", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Application.Exit();
+            }
+
+            return list;
+        }
 
         private void btnCamera_Click(object sender, EventArgs e)
         {
@@ -503,91 +644,19 @@ namespace GT4_Tools
             Properties.Settings.Default.Save();
         }
 
-        public static string ByteArrayToString(byte[] ba)
+        private void chkEsso_CheckedChanged(object sender, EventArgs e)
         {
-            return BitConverter.ToString(ba).Replace("-", "");
+            essoClicked = true;
         }
 
-        public string GetExistingPart(string memAddress, List<KeyValuePair<string, string>> listToSearch)
+        private void chkMarcos_CheckedChanged(object sender, EventArgs e)
         {
-            // Read the memory of the existing part, flip the two bytes (e.g. 1234 -> 3412)
-            cboPopulator = ByteArrayToString(m.readBytes(memAddress, 4));
-            cboPopulator = cboPopulator.Substring(2, 2) + cboPopulator.Substring(0, 2);
-            return listToSearch.FirstOrDefault(x => x.Key == cboPopulator).Value;
+            marcosClicked = true;
         }
 
-        public string MakeMemorySubstring(string partString)
+        private void chkOpel_CheckedChanged(object sender, EventArgs e)
         {
-            // Flip endianness of byte pair (e.g. 1234 -> 0x34 0x12)
-            string memAddr1 = "0x" + partString.Substring(2, 2);
-            string memAddr2 = "0x" + partString.Substring(0, 2);
-
-            return memAddr1 + " " + memAddr2;
-        }
-
-        public void PopulateComboBox(ComboBox comboBox, List<KeyValuePair<string, string>> list)
-        {
-            foreach(KeyValuePair<string, string> item in list)
-            {
-                comboBox.Items.Add(item.Value);
-            }
-
-            comboBox.SelectedIndex = 0;
-        }
-
-        public void PopulateGlobalList(params List<KeyValuePair<string, string>>[] lists)
-        {
-            foreach (List<KeyValuePair<string, string>> list in lists)
-            {
-                globalList.Add(list);
-            }
-        }
-
-        public void PopulateCboList(List<ComboBox> list, params ComboBox[] cbos)
-        {
-            foreach (ComboBox cbo in cbos)
-            {
-                list.Add(cbo);
-            }
-        }
-
-        public List<KeyValuePair<string, string>> LoadCSV(string csvFile, bool flippedString)
-        {
-            List<KeyValuePair<string, string>> list = new List<KeyValuePair<string, string>>();
-
-            try
-            {
-                using (StreamReader reader = new StreamReader(csvFile + ".csv"))
-                using (CsvParser csv = new CsvParser(reader))
-                {
-                    while (true)
-                    {
-                        string[] row = csv.Read();
-                        if (row == null)
-                        {
-                            break;
-                        }
-                        else
-                        {
-                            if (flippedString) // Some of the CSVs have the name first, some have the value first - little workaround to load either 
-                            {
-                                list.Add(new KeyValuePair<string, string>(row[1], row[0]));
-                            }
-                            else
-                            {
-                                list.Add(new KeyValuePair<string, string>(row[0], row[1]));
-                            }
-                        }
-                    }
-                }
-            }
-            catch (FileNotFoundException)
-            {
-                MessageBox.Show("File '" + csvFile + ".csv' not found. Please ensure this file is in the working directory and try again.", "File not found", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                Application.Exit();
-            }
-
-            return list;
+            opelClicked = true;
         }
     }
 }

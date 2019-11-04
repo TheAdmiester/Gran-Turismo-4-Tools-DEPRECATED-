@@ -78,10 +78,16 @@
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.cboDrivetrain = new System.Windows.Forms.ComboBox();
             this.btnDrivetrain = new System.Windows.Forms.Button();
+            this.tabPage6 = new System.Windows.Forms.TabPage();
+            this.groupBox12 = new System.Windows.Forms.GroupBox();
+            this.chkEsso = new System.Windows.Forms.CheckBox();
+            this.chkMarcos = new System.Windows.Forms.CheckBox();
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.groupBox11 = new System.Windows.Forms.GroupBox();
+            this.btnCamera = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
             this.cboCameraType = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
             this.nudFOV = new System.Windows.Forms.NumericUpDown();
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.label7 = new System.Windows.Forms.Label();
@@ -92,8 +98,7 @@
             this.chkTrack = new System.Windows.Forms.CheckBox();
             this.chkPlrCar = new System.Windows.Forms.CheckBox();
             this.chkCamera = new System.Windows.Forms.CheckBox();
-            this.groupBox11 = new System.Windows.Forms.GroupBox();
-            this.btnCamera = new System.Windows.Forms.Button();
+            this.chkOpel = new System.Windows.Forms.CheckBox();
             this.grpCars.SuspendLayout();
             this.grpTrack.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -110,10 +115,12 @@
             this.groupBox7.SuspendLayout();
             this.groupBox6.SuspendLayout();
             this.groupBox5.SuspendLayout();
+            this.tabPage6.SuspendLayout();
+            this.groupBox12.SuspendLayout();
             this.tabPage3.SuspendLayout();
+            this.groupBox11.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudFOV)).BeginInit();
             this.tabPage4.SuspendLayout();
-            this.groupBox11.SuspendLayout();
             this.SuspendLayout();
             // 
             // grpCars
@@ -219,6 +226,7 @@
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
             this.tabControl1.Controls.Add(this.tabPage5);
+            this.tabControl1.Controls.Add(this.tabPage6);
             this.tabControl1.Controls.Add(this.tabPage3);
             this.tabControl1.Controls.Add(this.tabPage4);
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
@@ -613,6 +621,50 @@
             this.btnDrivetrain.UseVisualStyleBackColor = true;
             this.btnDrivetrain.Click += new System.EventHandler(this.btnDrivetrain_Click);
             // 
+            // tabPage6
+            // 
+            this.tabPage6.Controls.Add(this.groupBox12);
+            this.tabPage6.Location = new System.Drawing.Point(4, 22);
+            this.tabPage6.Name = "tabPage6";
+            this.tabPage6.Size = new System.Drawing.Size(394, 570);
+            this.tabPage6.TabIndex = 5;
+            this.tabPage6.Text = "Body Swaps";
+            this.tabPage6.UseVisualStyleBackColor = true;
+            // 
+            // groupBox12
+            // 
+            this.groupBox12.Controls.Add(this.chkOpel);
+            this.groupBox12.Controls.Add(this.chkEsso);
+            this.groupBox12.Controls.Add(this.chkMarcos);
+            this.groupBox12.Location = new System.Drawing.Point(4, 4);
+            this.groupBox12.Name = "groupBox12";
+            this.groupBox12.Size = new System.Drawing.Size(383, 375);
+            this.groupBox12.TabIndex = 0;
+            this.groupBox12.TabStop = false;
+            this.groupBox12.Text = "Vehicle Body Swaps";
+            // 
+            // chkEsso
+            // 
+            this.chkEsso.AutoSize = true;
+            this.chkEsso.Location = new System.Drawing.Point(6, 19);
+            this.chkEsso.Name = "chkEsso";
+            this.chkEsso.Size = new System.Drawing.Size(201, 17);
+            this.chkEsso.TabIndex = 1;
+            this.chkEsso.Text = "Swap all Exxon-branded cars to Esso";
+            this.chkEsso.UseVisualStyleBackColor = true;
+            this.chkEsso.CheckedChanged += new System.EventHandler(this.chkEsso_CheckedChanged);
+            // 
+            // chkMarcos
+            // 
+            this.chkMarcos.AutoSize = true;
+            this.chkMarcos.Location = new System.Drawing.Point(6, 65);
+            this.chkMarcos.Name = "chkMarcos";
+            this.chkMarcos.Size = new System.Drawing.Size(220, 17);
+            this.chkMarcos.TabIndex = 0;
+            this.chkMarcos.Text = "Swap Mini Marcos GT for Rover Mini 1.3i";
+            this.chkMarcos.UseVisualStyleBackColor = true;
+            this.chkMarcos.CheckedChanged += new System.EventHandler(this.chkMarcos_CheckedChanged);
+            // 
             // tabPage3
             // 
             this.tabPage3.Controls.Add(this.groupBox11);
@@ -622,6 +674,39 @@
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Misc";
             this.tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // groupBox11
+            // 
+            this.groupBox11.Controls.Add(this.btnCamera);
+            this.groupBox11.Controls.Add(this.label1);
+            this.groupBox11.Controls.Add(this.cboCameraType);
+            this.groupBox11.Controls.Add(this.label2);
+            this.groupBox11.Controls.Add(this.nudFOV);
+            this.groupBox11.Location = new System.Drawing.Point(8, 3);
+            this.groupBox11.Name = "groupBox11";
+            this.groupBox11.Size = new System.Drawing.Size(379, 137);
+            this.groupBox11.TabIndex = 4;
+            this.groupBox11.TabStop = false;
+            this.groupBox11.Text = "Camera Settings";
+            // 
+            // btnCamera
+            // 
+            this.btnCamera.Location = new System.Drawing.Point(249, 86);
+            this.btnCamera.Name = "btnCamera";
+            this.btnCamera.Size = new System.Drawing.Size(121, 38);
+            this.btnCamera.TabIndex = 8;
+            this.btnCamera.Text = "Apply";
+            this.btnCamera.UseVisualStyleBackColor = true;
+            this.btnCamera.Click += new System.EventHandler(this.btnCamera_Click);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(6, 26);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(67, 13);
+            this.label1.TabIndex = 1;
+            this.label1.Text = "Field of View";
             // 
             // cboCameraType
             // 
@@ -644,15 +729,6 @@
             this.label2.Size = new System.Drawing.Size(236, 13);
             this.label2.TabIndex = 2;
             this.label2.Text = "Chase Camera Attachment (race reload required)";
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(6, 26);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(67, 13);
-            this.label1.TabIndex = 1;
-            this.label1.Text = "Field of View";
             // 
             // nudFOV
             // 
@@ -770,29 +846,16 @@
             this.chkCamera.Text = "Override Camera Settings";
             this.chkCamera.UseVisualStyleBackColor = true;
             // 
-            // groupBox11
+            // chkOpel
             // 
-            this.groupBox11.Controls.Add(this.btnCamera);
-            this.groupBox11.Controls.Add(this.label1);
-            this.groupBox11.Controls.Add(this.cboCameraType);
-            this.groupBox11.Controls.Add(this.label2);
-            this.groupBox11.Controls.Add(this.nudFOV);
-            this.groupBox11.Location = new System.Drawing.Point(8, 3);
-            this.groupBox11.Name = "groupBox11";
-            this.groupBox11.Size = new System.Drawing.Size(379, 137);
-            this.groupBox11.TabIndex = 4;
-            this.groupBox11.TabStop = false;
-            this.groupBox11.Text = "Camera Settings";
-            // 
-            // btnCamera
-            // 
-            this.btnCamera.Location = new System.Drawing.Point(249, 86);
-            this.btnCamera.Name = "btnCamera";
-            this.btnCamera.Size = new System.Drawing.Size(121, 38);
-            this.btnCamera.TabIndex = 8;
-            this.btnCamera.Text = "Apply";
-            this.btnCamera.UseVisualStyleBackColor = true;
-            this.btnCamera.Click += new System.EventHandler(this.btnCamera_Click);
+            this.chkOpel.AutoSize = true;
+            this.chkOpel.Location = new System.Drawing.Point(6, 42);
+            this.chkOpel.Name = "chkOpel";
+            this.chkOpel.Size = new System.Drawing.Size(169, 17);
+            this.chkOpel.TabIndex = 2;
+            this.chkOpel.Text = "Swap all Opel cars to Vauxhall";
+            this.chkOpel.UseVisualStyleBackColor = true;
+            this.chkOpel.CheckedChanged += new System.EventHandler(this.chkOpel_CheckedChanged);
             // 
             // GT4Tools
             // 
@@ -829,12 +892,15 @@
             this.groupBox7.ResumeLayout(false);
             this.groupBox6.ResumeLayout(false);
             this.groupBox5.ResumeLayout(false);
+            this.tabPage6.ResumeLayout(false);
+            this.groupBox12.ResumeLayout(false);
+            this.groupBox12.PerformLayout();
             this.tabPage3.ResumeLayout(false);
+            this.groupBox11.ResumeLayout(false);
+            this.groupBox11.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudFOV)).EndInit();
             this.tabPage4.ResumeLayout(false);
             this.tabPage4.PerformLayout();
-            this.groupBox11.ResumeLayout(false);
-            this.groupBox11.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -908,6 +974,11 @@
         private System.Windows.Forms.GroupBox groupBox11;
         private System.Windows.Forms.Button btnCamera;
         private System.Windows.Forms.CheckBox chkCamera;
+        private System.Windows.Forms.TabPage tabPage6;
+        private System.Windows.Forms.GroupBox groupBox12;
+        private System.Windows.Forms.CheckBox chkMarcos;
+        private System.Windows.Forms.CheckBox chkEsso;
+        private System.Windows.Forms.CheckBox chkOpel;
     }
 }
 
