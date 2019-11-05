@@ -9,13 +9,15 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using CsvHelper;
+using log4net;
 using Memory;
+
 
 namespace GT4_Tools
 {
     public partial class GT4Tools : Form
     {
-        Memory.Mem m = new Memory.Mem();
+        Mem m = new Mem();
         List<ComboBox> cboList1 = new List<ComboBox>();
         List<ComboBox> cboList2 = new List<ComboBox>();
         List<KeyValuePair<string, string>> cars = new List<KeyValuePair<string, string>>();
@@ -28,11 +30,12 @@ namespace GT4_Tools
         List<KeyValuePair<string, string>> turbos = new List<KeyValuePair<string, string>>();
         List<List<KeyValuePair<string, string>>> globalList = new List<List<KeyValuePair<string, string>>>();
         List<TextBox> txtCars = new List<TextBox>();
+        private static readonly ILog log = LogManager.GetLogger(typeof(GT4Tools));
         Random random = new Random();
         int rnd = 0, camType = 0;
         string cboPopulator, memWrite, selectedDrivetrain, selectedEngine, selectedExhaust, selectedNATune, selectedSupercharger, selectedTurbo;
         string drivetrain, engine, exhaust, naTune, supercharger, turbo, oppCar1, oppCar2, oppCar3, oppCar4, oppCar5, oppCarLbl1, oppCarLbl2, oppCarLbl3, oppCarLbl4, oppCarLbl5, plrCar, plrCarLbl, track, trackLbl;
-        bool btnDrivetrainClicked, btnEngineClicked, btnExhaustClicked, btnNATuneClicked, btnSuperchargerClicked, btnTurboClicked, csvsLoaded;
+        bool btnDrivetrainClicked, btnEngineClicked, btnExhaustClicked, btnNATuneClicked, btnSuperchargerClicked, btnTurboClicked, csvsLoaded, hybridTabChanged, isLoading;
         bool essoClicked, marcosClicked, opelClicked;
 
         public GT4Tools()
@@ -44,18 +47,22 @@ namespace GT4_Tools
 
         private void GT4Tools_Load(object sender, EventArgs e)
         {
+            //File.WriteAllText("log.txt", string.Empty);
             nudFOV.Value = Properties.Settings.Default.FOV;
             cboCameraType.SelectedIndex = Properties.Settings.Default.CameraSetting;
 
             if (!backgroundWorker1.IsBusy)
             {
                 backgroundWorker1.RunWorkerAsync();
+                log.Info("Background worker started");
             }
 
             foreach (TextBox textBox in grpCars.Controls.OfType<TextBox>())
             {
                 txtCars.Add(textBox);
             }
+
+            log.Info("Cars list populated");
 
             try
             {
@@ -89,6 +96,7 @@ namespace GT4_Tools
             {
                 PopulateComboBox(cboList2[i], globalList[i]);
             }
+            log.Info("Comboboxes populated");
         }
 
         private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
@@ -105,12 +113,26 @@ namespace GT4_Tools
 
                 if (openProc && csvsLoaded)
                 {
-                    selectedDrivetrain = GetExistingPart(Addresses.MEM_DRV, drivetrains);
-                    selectedEngine = GetExistingPart(Addresses.MEM_ENG, engines);
-                    selectedExhaust = GetExistingPart(Addresses.MEM_EXH, exhausts);
-                    selectedNATune = GetExistingPart(Addresses.MEM_NAT, naTunes);
-                    selectedSupercharger = GetExistingPart(Addresses.MEM_SPR, superchargers);
-                    selectedTurbo = GetExistingPart(Addresses.MEM_TRB, turbos);
+                    if (m.readByte("0x206DE8C0") == 1)
+                    {
+                        isLoading = true;
+                    }
+                    else
+                    {
+                        isLoading = false;
+                    }
+
+                    if (hybridTabChanged)
+                    {
+                        selectedDrivetrain = GetExistingPart(Addresses.MEM_DRV, drivetrains, "drivetrain");
+                        selectedEngine = GetExistingPart(Addresses.MEM_ENG, engines, "engine");
+                        selectedExhaust = GetExistingPart(Addresses.MEM_EXH, exhausts, "exhaust");
+                        selectedNATune = GetExistingPart(Addresses.MEM_NAT, naTunes, "NA tune");
+                        selectedSupercharger = GetExistingPart(Addresses.MEM_SPR, superchargers, "supercharger");
+                        selectedTurbo = GetExistingPart(Addresses.MEM_TRB, turbos, "turbo");
+
+                        hybridTabChanged = false;
+                    }
 
                     if (chkCamera.Checked)
                     {
@@ -128,21 +150,21 @@ namespace GT4_Tools
                         }
                     }
 
-                    if (chkPlrCar.Checked)
+                    if (chkPlrCar.Checked && isLoading)
                     {
                         m.writeMemory(Addresses.MEM_PLR, "bytes", "0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00");
 
                         m.writeMemory(Addresses.MEM_PLR, "string", plrCar);
                     }
 
-                    if (chkTrack.Checked)
+                    if (chkTrack.Checked && isLoading)
                     {
                         m.writeMemory(Addresses.MEM_TRK, "bytes", "0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00");
 
                         m.writeMemory(Addresses.MEM_TRK, "string", track);
                     }
 
-                    if (chkCar.Checked)
+                    if (chkCar.Checked && isLoading)
                     {
 
                         // If generating a new set of cars, null out any existing selection
@@ -167,6 +189,8 @@ namespace GT4_Tools
 
                         m.writeMemory(Addresses.MEM_DRV, "bytes", memWrite);
 
+                        log.Info("Wrote bytes " + memWrite + " to memory address " + Addresses.MEM_DRV);
+
                         btnDrivetrainClicked = false;
                     }
 
@@ -176,6 +200,8 @@ namespace GT4_Tools
                         m.writeMemory(Addresses.MEM_ENG, "bytes", "0x00 0x00 0x00 0x00");
 
                         m.writeMemory(Addresses.MEM_ENG, "bytes", memWrite);
+
+                        log.Info("Wrote bytes " + memWrite + " to memory address " + Addresses.MEM_ENG);
 
                         btnEngineClicked = false;
                     }
@@ -187,6 +213,8 @@ namespace GT4_Tools
 
                         m.writeMemory(Addresses.MEM_EXH, "bytes", memWrite);
 
+                        log.Info("Wrote bytes " + memWrite + " to memory address " + Addresses.MEM_ENG);
+
                         btnExhaustClicked = false;
                     }
 
@@ -196,6 +224,8 @@ namespace GT4_Tools
                         m.writeMemory(Addresses.MEM_NAT, "bytes", "0x00 0x00 0x00 0x00");
 
                         m.writeMemory(Addresses.MEM_NAT, "bytes", memWrite);
+
+                        log.Info("Wrote bytes " + memWrite + " to memory address " + Addresses.MEM_NAT);
 
                         btnNATuneClicked = false;
                     }
@@ -207,6 +237,8 @@ namespace GT4_Tools
 
                         m.writeMemory(Addresses.MEM_SPR, "bytes", memWrite);
 
+                        log.Info("Wrote bytes " + memWrite + " to memory address " + Addresses.MEM_SPR);
+
                         btnSuperchargerClicked = false;
                     }
 
@@ -216,6 +248,8 @@ namespace GT4_Tools
                         m.writeMemory(Addresses.MEM_TRB, "bytes", "0x00 0x00 0x00 0x00");
 
                         m.writeMemory(Addresses.MEM_TRB, "bytes", memWrite);
+
+                        log.Info("Wrote bytes " + memWrite + " to memory address " + Addresses.MEM_TRB);
 
                         btnTurboClicked = false;
                     }
@@ -282,11 +316,21 @@ namespace GT4_Tools
             return BitConverter.ToString(ba).Replace("-", "");
         }
 
-        public string GetExistingPart(string memAddress, List<KeyValuePair<string, string>> listToSearch)
+        public string GetExistingPart(string memAddress, List<KeyValuePair<string, string>> listToSearch, string carPart)
         {
             // Read the memory of the existing part, flip the two bytes (e.g. 1234 -> 3412)
             cboPopulator = ByteArrayToString(m.readBytes(memAddress, 4));
             cboPopulator = cboPopulator.Substring(2, 2) + cboPopulator.Substring(0, 2);
+
+            if (listToSearch.FirstOrDefault(x => x.Key == cboPopulator).Value != null)
+            {
+                log.Info(string.Format("Detected installed {0} part as {1}", carPart, listToSearch.FirstOrDefault(x => x.Key == cboPopulator).Value));
+            }
+            else
+            {
+                log.Info(string.Format("Detected installed {0} part as stock/none", carPart));
+            }
+
             return listToSearch.FirstOrDefault(x => x.Key == cboPopulator).Value;
         }
 
@@ -295,6 +339,8 @@ namespace GT4_Tools
             // Flip endianness of byte pair (e.g. 1234 -> 0x34 0x12)
             string memAddr1 = "0x" + partString.Substring(2, 2);
             string memAddr2 = "0x" + partString.Substring(0, 2);
+
+            log.Info("Built memory substring " + memAddr1 + " " + memAddr2 + " from input part string " + partString);
 
             return memAddr1 + " " + memAddr2;
         }
@@ -361,6 +407,7 @@ namespace GT4_Tools
                 Application.Exit();
             }
 
+            log.Info("File '" + csvFile + ".csv' successfully loaded");
             return list;
         }
 
@@ -451,6 +498,8 @@ namespace GT4_Tools
         {
             if (tabControl1.SelectedIndex == 2)
             {
+                hybridTabChanged = true;
+
                 if (drivetrains.FindIndex(x => x.Value == selectedDrivetrain) != -1)
                 {
                     cboDrivetrain.SelectedIndex = drivetrains.FindIndex(x => x.Value == selectedDrivetrain);
