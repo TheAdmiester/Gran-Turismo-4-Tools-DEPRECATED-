@@ -80,6 +80,7 @@
             this.btnDrivetrain = new System.Windows.Forms.Button();
             this.tabPage6 = new System.Windows.Forms.TabPage();
             this.groupBox12 = new System.Windows.Forms.GroupBox();
+            this.chkOpel = new System.Windows.Forms.CheckBox();
             this.chkEsso = new System.Windows.Forms.CheckBox();
             this.chkMarcos = new System.Windows.Forms.CheckBox();
             this.tabPage3 = new System.Windows.Forms.TabPage();
@@ -98,7 +99,7 @@
             this.chkTrack = new System.Windows.Forms.CheckBox();
             this.chkPlrCar = new System.Windows.Forms.CheckBox();
             this.chkCamera = new System.Windows.Forms.CheckBox();
-            this.chkOpel = new System.Windows.Forms.CheckBox();
+            this.btnRescan = new System.Windows.Forms.Button();
             this.grpCars.SuspendLayout();
             this.grpTrack.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -641,7 +642,18 @@
             this.groupBox12.Size = new System.Drawing.Size(383, 90);
             this.groupBox12.TabIndex = 0;
             this.groupBox12.TabStop = false;
-            this.groupBox12.Text = "Vehicle Body Swaps";
+            this.groupBox12.Text = "Vehicle Body Swaps (NTSC-U Only)";
+            // 
+            // chkOpel
+            // 
+            this.chkOpel.AutoSize = true;
+            this.chkOpel.Location = new System.Drawing.Point(6, 42);
+            this.chkOpel.Name = "chkOpel";
+            this.chkOpel.Size = new System.Drawing.Size(169, 17);
+            this.chkOpel.TabIndex = 2;
+            this.chkOpel.Text = "Swap all Opel cars to Vauxhall";
+            this.chkOpel.UseVisualStyleBackColor = true;
+            this.chkOpel.CheckedChanged += new System.EventHandler(this.chkOpel_CheckedChanged);
             // 
             // chkEsso
             // 
@@ -846,22 +858,22 @@
             this.chkCamera.Text = "Override Camera Settings";
             this.chkCamera.UseVisualStyleBackColor = true;
             // 
-            // chkOpel
+            // btnRescan
             // 
-            this.chkOpel.AutoSize = true;
-            this.chkOpel.Location = new System.Drawing.Point(6, 42);
-            this.chkOpel.Name = "chkOpel";
-            this.chkOpel.Size = new System.Drawing.Size(169, 17);
-            this.chkOpel.TabIndex = 2;
-            this.chkOpel.Text = "Swap all Opel cars to Vauxhall";
-            this.chkOpel.UseVisualStyleBackColor = true;
-            this.chkOpel.CheckedChanged += new System.EventHandler(this.chkOpel_CheckedChanged);
+            this.btnRescan.Location = new System.Drawing.Point(251, 648);
+            this.btnRescan.Name = "btnRescan";
+            this.btnRescan.Size = new System.Drawing.Size(140, 42);
+            this.btnRescan.TabIndex = 8;
+            this.btnRescan.Text = "Rescan Game Version";
+            this.btnRescan.UseVisualStyleBackColor = true;
+            this.btnRescan.Click += new System.EventHandler(this.btnRescan_Click);
             // 
             // GT4Tools
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(403, 698);
+            this.Controls.Add(this.btnRescan);
             this.Controls.Add(this.chkCamera);
             this.Controls.Add(this.chkPlrCar);
             this.Controls.Add(this.chkTrack);
@@ -979,6 +991,7 @@
         private System.Windows.Forms.CheckBox chkMarcos;
         private System.Windows.Forms.CheckBox chkEsso;
         private System.Windows.Forms.CheckBox chkOpel;
+        private System.Windows.Forms.Button btnRescan;
     }
 }
 

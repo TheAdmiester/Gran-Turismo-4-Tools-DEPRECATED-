@@ -13,6 +13,11 @@
         public uint Exhaust => GarageBase + 0xD8;
         public uint Supercharger => GarageBase + 0x110;
 
+        // Condition parts (current car)
+        public uint Mileage => GarageBase + 0x4A0;
+        public uint Oil => GarageBase + 0x4A8;
+        public uint BodyRigidity => GarageBase + 0x4B0;
+
         // Camera settings
         public static string MEM_FOVA = "0x21FDDCD4"; // Arcade FOV
         public static string MEM_FOVG = "0x21FE1294"; // GT Mode FOV

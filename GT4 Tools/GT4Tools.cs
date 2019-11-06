@@ -18,7 +18,7 @@ namespace GT4_Tools
     public partial class GT4Tools : Form
     {
         Mem m = new Mem();
-        Addresses addresses = new NTSCUAddresses();
+        Addresses addresses;// = new NTSCUAddresses();
         List<ComboBox> cboList1 = new List<ComboBox>();
         List<ComboBox> cboList2 = new List<ComboBox>();
         List<KeyValuePair<string, string>> cars = new List<KeyValuePair<string, string>>();
@@ -35,7 +35,7 @@ namespace GT4_Tools
         Random random = new Random();
         int rnd = 0, camType = 0;
         string cboPopulator, memWrite, selectedDrivetrain, selectedEngine, selectedExhaust, selectedNATune, selectedSupercharger, selectedTurbo;
-        string drivetrain, engine, exhaust, naTune, supercharger, turbo, oppCar1, oppCar2, oppCar3, oppCar4, oppCar5, oppCarLbl1, oppCarLbl2, oppCarLbl3, oppCarLbl4, oppCarLbl5, plrCar, plrCarLbl, track, trackLbl;
+        string drivetrain, engine, exhaust, naTune, supercharger, turbo, oppCar1, oppCar2, oppCar3, oppCar4, oppCar5, oppCarLbl1, oppCarLbl2, oppCarLbl3, oppCarLbl4, oppCarLbl5, plrCar, plrCarLbl, track, trackLbl, gameVer;
         bool btnDrivetrainClicked, btnEngineClicked, btnExhaustClicked, btnNATuneClicked, btnSuperchargerClicked, btnTurboClicked, csvsLoaded, hybridTabChanged, isLoading;
         bool essoClicked, marcosClicked, opelClicked;
 
@@ -98,6 +98,8 @@ namespace GT4_Tools
                 PopulateComboBox(cboList2[i], globalList[i]);
             }
             log.Info("Comboboxes populated");
+
+            CheckGameVersion();
         }
 
         private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
@@ -417,6 +419,48 @@ namespace GT4_Tools
 
         private byte[] ReadMemoryBytes(uint address, long length) => m.readBytes($"0x{address:X8}", length);
 
+        private void CheckGameVersion()
+        {
+            // Hook process once to check game version
+            int pID = m.getProcIDFromName("pcsx2");
+            bool openProc = false;
+            if (pID > 0)
+            {
+                openProc = m.OpenProcess(pID);
+            }
+
+            if (openProc)
+            {
+                gameVer = m.readString("0x2103D640");
+
+                switch (gameVer)
+                {
+                    case GameVersions.NTSC_U:
+                        addresses = new NTSCUAddresses();
+                        chkEsso.Enabled = true;
+                        chkMarcos.Enabled = true;
+                        chkOpel.Enabled = true;
+                        MessageBox.Show("Detected NTSC-U version: " + gameVer, "Detected version: " + gameVer, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        log.Info("Detected version " + gameVer + ", addresses = " + addresses.ToString());
+                        break;
+
+                    case GameVersions.PAL:
+                        addresses = new PALAddresses();
+                        chkEsso.Enabled = false;
+                        chkMarcos.Enabled = false;
+                        chkOpel.Enabled = false;
+                        MessageBox.Show("Detected PAL version: " + gameVer, "Detected version: " + gameVer, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        log.Info("Detected version " + gameVer + ", addresses = " + addresses.ToString());
+                        break;
+
+                    default:
+                        MessageBox.Show("Unsupported game version detected! Please load a supported game version and rescan.", "Unsupported version: " + gameVer, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        log.Info("Unsupported version " + gameVer);
+                        break;
+                }
+            }
+        }
+
         private void btnCamera_Click(object sender, EventArgs e)
         {
             chkCamera.Checked = true;
@@ -712,6 +756,11 @@ namespace GT4_Tools
         private void chkOpel_CheckedChanged(object sender, EventArgs e)
         {
             opelClicked = true;
+        }
+
+        private void btnRescan_Click(object sender, EventArgs e)
+        {
+            CheckGameVersion();
         }
     }
 }

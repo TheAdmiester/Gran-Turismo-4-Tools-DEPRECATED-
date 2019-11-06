@@ -60,6 +60,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GameVersions.cs" />
     <Compile Include="PALAddresses.cs" />
     <Compile Include="NTSCUAddresses.cs" />
     <Compile Include="GT4Tools.cs">
