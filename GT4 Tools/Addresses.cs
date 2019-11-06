@@ -1,20 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace GT4_Tools
+﻿namespace GT4_Tools
 {
-    public static class Addresses
+    public abstract class Addresses
     {
+        protected const uint memoryBase = 0x20000000;
+        protected virtual uint GarageBase => memoryBase + 0x00A1F7C8;
+
         // Hybrid parts (current car)
-        public static string MEM_DRV = "0x20A1F810"; // Drivetrain
-        public static string MEM_ENG = "0x20A1F808"; // Engine 
-        public static string MEM_EXH = "0x20A1F8A0"; // Exhaust
-        public static string MEM_NAT = "0x20A1F878"; // NA Tune
-        public static string MEM_SPR = "0x20A1F8D8"; // Supercharger
-        public static string MEM_TRB = "0x20A1F880"; // Turbo
+        public uint Engine => GarageBase + 0x40;
+        public uint Drivetrain => GarageBase + 0x48;
+        public uint NATune => GarageBase + 0xB0;
+        public uint Turbo => GarageBase + 0xB8;
+        public uint Exhaust => GarageBase + 0xD8;
+        public uint Supercharger => GarageBase + 0x110;
 
         // Camera settings
         public static string MEM_FOVA = "0x21FDDCD4"; // Arcade FOV

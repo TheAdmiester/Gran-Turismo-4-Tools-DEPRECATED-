@@ -18,6 +18,7 @@ namespace GT4_Tools
     public partial class GT4Tools : Form
     {
         Mem m = new Mem();
+        Addresses addresses = new NTSCUAddresses();
         List<ComboBox> cboList1 = new List<ComboBox>();
         List<ComboBox> cboList2 = new List<ComboBox>();
         List<KeyValuePair<string, string>> cars = new List<KeyValuePair<string, string>>();
@@ -124,12 +125,12 @@ namespace GT4_Tools
 
                     if (hybridTabChanged)
                     {
-                        selectedDrivetrain = GetExistingPart(Addresses.MEM_DRV, drivetrains, "drivetrain");
-                        selectedEngine = GetExistingPart(Addresses.MEM_ENG, engines, "engine");
-                        selectedExhaust = GetExistingPart(Addresses.MEM_EXH, exhausts, "exhaust");
-                        selectedNATune = GetExistingPart(Addresses.MEM_NAT, naTunes, "NA tune");
-                        selectedSupercharger = GetExistingPart(Addresses.MEM_SPR, superchargers, "supercharger");
-                        selectedTurbo = GetExistingPart(Addresses.MEM_TRB, turbos, "turbo");
+                        selectedDrivetrain = GetExistingPart(addresses.Drivetrain, drivetrains, "drivetrain");
+                        selectedEngine = GetExistingPart(addresses.Engine, engines, "engine");
+                        selectedExhaust = GetExistingPart(addresses.Exhaust, exhausts, "exhaust");
+                        selectedNATune = GetExistingPart(addresses.NATune, naTunes, "NA tune");
+                        selectedSupercharger = GetExistingPart(addresses.Supercharger, superchargers, "supercharger");
+                        selectedTurbo = GetExistingPart(addresses.Turbo, turbos, "turbo");
 
                         hybridTabChanged = false;
                     }
@@ -185,11 +186,11 @@ namespace GT4_Tools
                     if (btnDrivetrainClicked)
                     {
                         memWrite = MakeMemorySubstring(drivetrain);
-                        m.writeMemory(Addresses.MEM_DRV, "bytes", "0x00 0x00 0x00 0x00");
+                        WriteMemory(addresses.Drivetrain, "bytes", "0x00 0x00 0x00 0x00");
 
-                        m.writeMemory(Addresses.MEM_DRV, "bytes", memWrite);
+                        WriteMemory(addresses.Drivetrain, "bytes", memWrite);
 
-                        log.Info("Wrote bytes " + memWrite + " to memory address " + Addresses.MEM_DRV);
+                        log.Info($"Wrote bytes {memWrite} to memory address {addresses.Drivetrain:X8}");
 
                         btnDrivetrainClicked = false;
                     }
@@ -197,11 +198,11 @@ namespace GT4_Tools
                     if (btnEngineClicked)
                     {
                         memWrite = MakeMemorySubstring(engine);
-                        m.writeMemory(Addresses.MEM_ENG, "bytes", "0x00 0x00 0x00 0x00");
+                        WriteMemory(addresses.Engine, "bytes", "0x00 0x00 0x00 0x00");
 
-                        m.writeMemory(Addresses.MEM_ENG, "bytes", memWrite);
+                        WriteMemory(addresses.Engine, "bytes", memWrite);
 
-                        log.Info("Wrote bytes " + memWrite + " to memory address " + Addresses.MEM_ENG);
+                        log.Info($"Wrote bytes {memWrite} to memory address {addresses.Engine:X8}");
 
                         btnEngineClicked = false;
                     }
@@ -209,11 +210,11 @@ namespace GT4_Tools
                     if (btnExhaustClicked)
                     {
                         memWrite = MakeMemorySubstring(exhaust);
-                        m.writeMemory(Addresses.MEM_EXH, "bytes", "0x00 0x00 0x00 0x00");
+                        WriteMemory(addresses.Exhaust, "bytes", "0x00 0x00 0x00 0x00");
 
-                        m.writeMemory(Addresses.MEM_EXH, "bytes", memWrite);
+                        WriteMemory(addresses.Exhaust, "bytes", memWrite);
 
-                        log.Info("Wrote bytes " + memWrite + " to memory address " + Addresses.MEM_ENG);
+                        log.Info($"Wrote bytes {memWrite} to memory address {addresses.Exhaust:X8}");
 
                         btnExhaustClicked = false;
                     }
@@ -221,11 +222,11 @@ namespace GT4_Tools
                     if (btnNATuneClicked)
                     {
                         memWrite = MakeMemorySubstring(naTune);
-                        m.writeMemory(Addresses.MEM_NAT, "bytes", "0x00 0x00 0x00 0x00");
+                        WriteMemory(addresses.NATune, "bytes", "0x00 0x00 0x00 0x00");
 
-                        m.writeMemory(Addresses.MEM_NAT, "bytes", memWrite);
+                        WriteMemory(addresses.NATune, "bytes", memWrite);
 
-                        log.Info("Wrote bytes " + memWrite + " to memory address " + Addresses.MEM_NAT);
+                        log.Info($"Wrote bytes {memWrite} to memory address {addresses.NATune:X8}");
 
                         btnNATuneClicked = false;
                     }
@@ -233,11 +234,11 @@ namespace GT4_Tools
                     if (btnSuperchargerClicked)
                     {
                         memWrite = MakeMemorySubstring(supercharger);
-                        m.writeMemory(Addresses.MEM_SPR, "bytes", "0x00 0x00 0x00 0x00");
+                        WriteMemory(addresses.Supercharger, "bytes", "0x00 0x00 0x00 0x00");
 
-                        m.writeMemory(Addresses.MEM_SPR, "bytes", memWrite);
+                        WriteMemory(addresses.Supercharger, "bytes", memWrite);
 
-                        log.Info("Wrote bytes " + memWrite + " to memory address " + Addresses.MEM_SPR);
+                        log.Info($"Wrote bytes {memWrite} to memory address {addresses.Supercharger:X8}");
 
                         btnSuperchargerClicked = false;
                     }
@@ -245,11 +246,11 @@ namespace GT4_Tools
                     if (btnTurboClicked)
                     {
                         memWrite = MakeMemorySubstring(turbo);
-                        m.writeMemory(Addresses.MEM_TRB, "bytes", "0x00 0x00 0x00 0x00");
+                        WriteMemory(addresses.Turbo, "bytes", "0x00 0x00 0x00 0x00");
 
-                        m.writeMemory(Addresses.MEM_TRB, "bytes", memWrite);
+                        WriteMemory(addresses.Turbo, "bytes", memWrite);
 
-                        log.Info("Wrote bytes " + memWrite + " to memory address " + Addresses.MEM_TRB);
+                        log.Info($"Wrote bytes {memWrite} to memory address {addresses.Turbo:X8}");
 
                         btnTurboClicked = false;
                     }
@@ -316,22 +317,23 @@ namespace GT4_Tools
             return BitConverter.ToString(ba).Replace("-", "");
         }
 
-        public string GetExistingPart(string memAddress, List<KeyValuePair<string, string>> listToSearch, string carPart)
+        public string GetExistingPart(uint memAddress, List<KeyValuePair<string, string>> listToSearch, string carPart)
         {
             // Read the memory of the existing part, flip the two bytes (e.g. 1234 -> 3412)
-            cboPopulator = ByteArrayToString(m.readBytes(memAddress, 4));
+            cboPopulator = ByteArrayToString(ReadMemoryBytes(memAddress, 4));
             cboPopulator = cboPopulator.Substring(2, 2) + cboPopulator.Substring(0, 2);
 
-            if (listToSearch.FirstOrDefault(x => x.Key == cboPopulator).Value != null)
+            string foundPart = listToSearch.FirstOrDefault(x => x.Key == cboPopulator).Value;
+            if (foundPart != null)
             {
-                log.Info(string.Format("Detected installed {0} part as {1}", carPart, listToSearch.FirstOrDefault(x => x.Key == cboPopulator).Value));
+                log.Info(string.Format("Detected installed {0} part as {1}", carPart, foundPart));
             }
             else
             {
                 log.Info(string.Format("Detected installed {0} part as stock/none", carPart));
             }
 
-            return listToSearch.FirstOrDefault(x => x.Key == cboPopulator).Value;
+            return foundPart;
         }
 
         public string MakeMemorySubstring(string partString)
@@ -410,6 +412,10 @@ namespace GT4_Tools
             log.Info("File '" + csvFile + ".csv' successfully loaded");
             return list;
         }
+
+        private bool WriteMemory(uint address, string type, string write) => m.writeMemory($"0x{address:X8}", type, write);
+
+        private byte[] ReadMemoryBytes(uint address, long length) => m.readBytes($"0x{address:X8}", length);
 
         private void btnCamera_Click(object sender, EventArgs e)
         {
