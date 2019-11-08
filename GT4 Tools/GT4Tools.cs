@@ -431,7 +431,7 @@ namespace GT4_Tools
 
             if (openProc)
             {
-                gameVer = m.readString("0x2103D640");
+                gameVer = m.readString("0x0E24C391");
 
                 switch (gameVer)
                 {

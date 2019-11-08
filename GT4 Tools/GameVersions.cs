@@ -9,8 +9,8 @@ namespace GT4_Tools
     public static class GameVersions
     {
         // Supported
-        public const string NTSC_U = "SCUS-97328";
-        public const string PAL = "SCES-51719";
+        public const string NTSC_U = "SCUS_973.28;1";
+        public const string PAL = "SCES_517.19;1";
 
         // Unsupported
         public const string NTSC_J = "SCAJ-30006";
