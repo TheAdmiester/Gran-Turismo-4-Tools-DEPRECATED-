@@ -36,7 +36,7 @@ namespace GT4_Tools
         int rnd = 0, camType = 0;
         string cboPopulator, memWrite, selectedDrivetrain, selectedEngine, selectedExhaust, selectedNATune, selectedSupercharger, selectedTurbo;
         string drivetrain, engine, exhaust, naTune, supercharger, turbo, oppCar1, oppCar2, oppCar3, oppCar4, oppCar5, oppCarLbl1, oppCarLbl2, oppCarLbl3, oppCarLbl4, oppCarLbl5, plrCar, plrCarLbl, track, trackLbl, gameVer;
-        bool btnDrivetrainClicked, btnEngineClicked, btnExhaustClicked, btnNATuneClicked, btnSuperchargerClicked, btnTurboClicked, csvsLoaded, hybridTabChanged, isLoading;
+        bool btnDrivetrainClicked, btnEngineClicked, btnExhaustClicked, btnNATuneClicked, btnSuperchargerClicked, btnTurboClicked, csvsLoaded, hybridTabChanged, isLoading, isPreRace;
         bool essoClicked, marcosClicked, opelClicked;
 
         public GT4Tools()
@@ -99,7 +99,9 @@ namespace GT4_Tools
             }
             log.Info("Comboboxes populated");
 
-            CheckGameVersion();
+            //CheckGameVersion();
+
+            addresses = new NTSCUAddresses();
         }
 
         private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
@@ -116,13 +118,22 @@ namespace GT4_Tools
 
                 if (openProc && csvsLoaded)
                 {
-                    if (m.readByte("0x206DE8C0") == 1)
+                    if (m.readByte("0x206DE8C0") == 1 && m.readByte("0x21C04910") != 0)
                     {
                         isLoading = true;
                     }
                     else
                     {
                         isLoading = false;
+                    }
+
+                    if (m.readString("0x21D3BD70").Contains("Course Length :"))
+                    {
+                        isPreRace = true;
+                    }
+                    else
+                    {
+                        isPreRace = false;
                     }
 
                     if (hybridTabChanged)
@@ -137,7 +148,7 @@ namespace GT4_Tools
                         hybridTabChanged = false;
                     }
 
-                    if (chkCamera.Checked)
+                    if (chkCamera.Checked && !isLoading)
                     {
                         m.writeMemory(Addresses.MEM_FOVA, "float", nudFOV.Value.ToString()); // Arcade mode FOV
                         m.writeMemory(Addresses.MEM_FOVG, "float", nudFOV.Value.ToString()); // GT Mode FOV
@@ -145,7 +156,7 @@ namespace GT4_Tools
 
                         if (camType == 1)
                         {
-                            m.writeMemory(Addresses.MEM_CAM, "bytes", "0xF0 0x3F 0x01 0x3C"); // Set to GT3-like chase camera attachment
+                            m.writeMemory(Addresses.MEM_CAM, "bytes", "0xC0 0x3F 0x01 0x3C"); // Set to GT3-like chase camera attachment
                         }
                         else
                         {
