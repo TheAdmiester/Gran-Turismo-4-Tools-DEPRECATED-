@@ -1,5 +1,5 @@
 # Gran-Turismo-4-Tools
-A tool to simplify the process of memory editing Gran Turismo 4 NTSC on PCSX2. 
+A tool to simplify the process of memory editing Gran Turismo 4 on PCSX2. 
 
 # Download
 Latest builds are available in the [releases tab.](https://github.com/AJB-Tech/Gran-Turismo-4-Tools/releases)
