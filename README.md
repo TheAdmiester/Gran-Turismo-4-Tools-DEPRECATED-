@@ -1,3 +1,4 @@
+# Recent PCSX2 updates are no longer compatible with this tool. This tool is deprecated/unsupported until further notice.
 # Gran-Turismo-4-Tools
 A tool to simplify the process of memory editing Gran Turismo 4 on PCSX2. 
 
